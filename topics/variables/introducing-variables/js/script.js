@@ -1,15 +1,14 @@
 /**
- * Title of Project
- * Author Name
+ * Introducing variables
+ * Ray Hernaez
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * Learning what variable is and does
  */
 
 "use strict";
 
 /**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
+ * Create a canvas
 */
 function setup() {
 
