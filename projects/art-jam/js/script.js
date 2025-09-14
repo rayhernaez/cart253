@@ -43,6 +43,32 @@ function draw() {
 
     pop();
 
+    // Draw Torso
+    push();
+    noStroke();
+    fill("#ee7373ff");
+    triangle(300, 390, 150, 450, 450, 450);
+    rect(150, 450, 300, 150);
+    triangle(150, 450, 150, 600, 100, 600);
+    triangle(450, 450, 450, 600, 500, 600);
+    pop();
+
+    // Shirt lines
+    push();
+    stroke("#d16666ff");
+    strokeWeight(5);
+    line(190, 530, 190, 600);
+    line(410, 530, 410, 600);
+    pop();
+
+    // Draw Neck
+    push();
+    noStroke();
+    fill("#c5a591ff");
+    rect(270, 355, 60, 50);
+    triangle(270, 405, 330, 405, 300, 450);
+    pop();
+
     // Draw Head
     push();
     noStroke();
