@@ -24,6 +24,25 @@ function draw() {
 
     background("#e5e5e5ff");
 
+    // Draw Ears
+    push();
+    noStroke();
+    fill("#c5a591ff");
+
+    // Right ear
+    beginShape();
+    vertex(395, 245);
+    bezierVertex(430, 225, 420, 290, 390, 285);
+    endShape();
+
+    // Left ear
+    beginShape();
+    vertex(205, 245);
+    bezierVertex(170, 225, 180, 290, 210, 285);
+    endShape();
+
+    pop();
+
     // Draw Head
     push();
     noStroke();
@@ -60,7 +79,7 @@ function draw() {
     push();
     stroke("#d48587ff");
     strokeWeight(5);
-    line(290, 330, 310, 330);
+    line(290, 340, 310, 340);
     pop();
 
     // Draw Hair
@@ -70,11 +89,13 @@ function draw() {
 
     arc(300, 205, 200, 150, -PI, 0, CHORD);
 
-    // Draw Bangs
+    // Bangs
     triangle(200, 205, 250, 205, 225, 240);
     triangle(250, 205, 300, 205, 275, 240);
     triangle(300, 205, 350, 205, 325, 240);
     triangle(350, 205, 400, 205, 375, 240);
 
     pop();
+
+
 }
