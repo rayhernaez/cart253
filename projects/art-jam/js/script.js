@@ -22,7 +22,51 @@ function draw() {
     // DELETE LATER - SHOW MOUSE COORDINATES
     console.log(mouseX, mouseY);
 
+    drawBackground();
+    drawTorso();
+    drawNeck();
+    drawHead();
+    drawCookie();
+    drawSpider();
+}
+
+// Draws the background
+function drawBackground() {
     background("#e5e5e5ff");
+}
+
+// Draws Torso + Shirt
+function drawTorso() {
+    push();
+    noStroke();
+    fill("#ee7373ff");
+    triangle(300, 390, 150, 450, 450, 450);
+    rect(150, 450, 300, 150);
+    triangle(150, 450, 150, 600, 100, 600);
+    triangle(450, 450, 450, 600, 500, 600);
+    pop();
+
+    // Shirt lines
+    push();
+    stroke("#d16666ff");
+    strokeWeight(5);
+    line(190, 530, 190, 600);
+    line(410, 530, 410, 600);
+    pop();
+}
+
+// Draws Neck
+function drawNeck() {
+    push();
+    noStroke();
+    fill("#c5a591ff");
+    rect(270, 355, 60, 50);
+    triangle(270, 405, 330, 405, 300, 450);
+    pop();
+}
+
+// Draws Head - Face body parts + Hair
+function drawHead() {
 
     // Draw Ears
     push();
@@ -43,32 +87,6 @@ function draw() {
 
     pop();
 
-    // Draw Torso
-    push();
-    noStroke();
-    fill("#ee7373ff");
-    triangle(300, 390, 150, 450, 450, 450);
-    rect(150, 450, 300, 150);
-    triangle(150, 450, 150, 600, 100, 600);
-    triangle(450, 450, 450, 600, 500, 600);
-    pop();
-
-    // Shirt lines
-    push();
-    stroke("#d16666ff");
-    strokeWeight(5);
-    line(190, 530, 190, 600);
-    line(410, 530, 410, 600);
-    pop();
-
-    // Draw Neck
-    push();
-    noStroke();
-    fill("#c5a591ff");
-    rect(270, 355, 60, 50);
-    triangle(270, 405, 330, 405, 300, 450);
-    pop();
-
     // Draw Head
     push();
     noStroke();
@@ -77,7 +95,6 @@ function draw() {
     pop();
 
     // Draw Eyes
-
     // Eyeballs
     push();
     // noStroke();
@@ -122,8 +139,10 @@ function draw() {
     triangle(350, 205, 400, 205, 375, 240);
 
     pop();
+}
 
-    // Draw Cookie
+// Draws Cookie - Biscuit + Chips
+function drawCookie() {
     push();
     noStroke();
 
@@ -140,14 +159,15 @@ function draw() {
     ellipse(115, 108, 5);
 
     pop();
+}
 
-    // Draw Spider
-
-    // Legs
+// Draws Spider - Head + Body + Legs
+function drawSpider() {
     push();
     noFill();
     strokeWeight(3);
 
+    // Legs
     beginShape();
     vertex(495, 90);
     quadraticVertex(470, 90, 470, 60);
