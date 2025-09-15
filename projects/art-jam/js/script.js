@@ -140,4 +140,68 @@ function draw() {
     ellipse(115, 108, 5);
 
     pop();
+
+    // Draw Spider
+
+    // Legs
+    push();
+    noFill();
+    strokeWeight(3);
+
+    beginShape();
+    vertex(495, 90);
+    quadraticVertex(470, 90, 470, 60);
+    endShape();
+
+    beginShape();
+    vertex(500, 90);
+    quadraticVertex(480, 95, 470, 105);
+    endShape();
+
+    beginShape();
+    vertex(500, 95);
+    quadraticVertex(480, 110, 480, 120);
+    endShape();
+
+    beginShape();
+    vertex(500, 100);
+    quadraticVertex(490, 125, 500, 135);
+    endShape();
+
+    beginShape();
+    vertex(525, 90);
+    quadraticVertex(550, 90, 550, 60);
+    endShape();
+
+    beginShape();
+    vertex(520, 90);
+    quadraticVertex(540, 95, 550, 105);
+    endShape();
+
+    beginShape();
+    vertex(520, 95);
+    quadraticVertex(540, 110, 540, 120);
+    endShape();
+
+    beginShape();
+    vertex(520, 100);
+    quadraticVertex(530, 125, 520, 135);
+    endShape();
+
+    pop();
+
+    // Head + Body
+    push();
+    noStroke();
+
+    fill("#353535ff");
+    ellipse(510, 80, 40);
+    ellipse(510, 100, 20);
+
+    // Eyes
+    fill("#c1a674ff");
+    ellipse(507, 105, 3);
+    ellipse(513, 105, 3);
+
+    pop();
 }
