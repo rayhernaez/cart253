@@ -123,5 +123,21 @@ function draw() {
 
     pop();
 
+    // Draw Cookie
+    push();
+    noStroke();
 
+    // Biscuit
+    fill("#debca0ff");
+    ellipse(100, 90, 80);
+
+    // Chips
+    fill("#684c34ff");
+    ellipse(80, 80, 10);
+    ellipse(105, 65, 8);
+    ellipse(92, 105, 8);
+    ellipse(115, 85, 10);
+    ellipse(115, 108, 5);
+
+    pop();
 }
