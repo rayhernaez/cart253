@@ -104,11 +104,18 @@ function drawHead() {
     pop();
 
     // Pupils
+    // push();
+    // noStroke();
+    // fill("#5d3f2eff");
+    // ellipse(260, 270, 15);
+    // ellipse(340, 270, 15);
+    // pop();
+
     push();
     noStroke();
     fill("#5d3f2eff");
-    ellipse(260, 270, 15);
-    ellipse(340, 270, 15);
+    drawPupil(260, 270, 15, 50);
+    drawPupil(340, 270, 15, 50);
     pop();
 
     // Draw Nose
@@ -139,6 +146,15 @@ function drawHead() {
     triangle(350, 205, 400, 205, 375, 240);
 
     pop();
+}
+
+// Draw Pupils - Tracking Mouse Cursor
+function drawPupil(x, y, pupilDiam, eyeWidth) {
+    let pupilRadius = pupilDiam / 2;
+    let range = eyeWidth / 2 - pupilRadius - 5;
+    let xOffset = constrain(mouseX - x, -range, range);
+    let yOffset = constrain(y - mouseY, 0, 2);
+    ellipse(x + xOffset, y - yOffset, pupilDiam);
 }
 
 // Draws Cookie - Biscuit + Chips
