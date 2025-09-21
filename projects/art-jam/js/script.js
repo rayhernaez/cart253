@@ -7,6 +7,21 @@
 
 "use strict";
 
+// Draggable state of cookie & spider
+let cookie = {
+    x: 100,
+    y: 90,
+    r: 40,
+};
+let spider = {
+    x: 510,
+    y: 90,
+    r: 30,
+};
+let dragging = null;
+let grabOffsetX = 0;
+let grabOffsetY = 0;
+
 /**
  * Creates the canvas
 */
@@ -27,6 +42,48 @@ function draw() {
     drawHead();
     drawCookie();
     drawSpider();
+}
+
+// Pressing using the mouse
+function mousePressed() {
+    // If cookie is pressed
+    if (dist(mouseX, mouseY, cookie.x, cookie.y) <= cookie.r) {
+        dragging = "cookie";
+        grabOffsetX = mouseX - cookie.x;
+        grabOffsetY = mouseY - cookie.y;
+        return;
+    }
+    // If spider is pressed
+    else if (dist(mouseX, mouseY, spider.x, spider.y) <= spider.r) {
+        dragging = "spider";
+        grabOffsetX = mouseX - spider.x;
+        grabOffsetY - mouseY - spider.y;
+        return;
+    }
+    else {
+        dragging = null;
+    }
+}
+
+// Dragging using the mouse
+function mouseDragged() {
+    // If mouse is dragging cookie
+    if (dragging === "cookie") {
+        cookie.x = constrain(mouseX - grabOffsetX, cookie.r, width - cookie.r);
+        cookie.y = constrain(mouseY - grabOffsetY, cookie.r, height - cookie.r);
+    }
+    // If mouse is dragging spider
+    else if (dragging === "spider") {
+        // Added padding to keep legs visible in the canvas
+        const spiderPadding = 50;
+        spider.x = constrain(mouseX - grabOffsetX, spiderPadding, width - spiderPadding);
+        spider.y = constrain(mouseY - grabOffsetY, spiderPadding, height - spiderPadding);
+    }
+}
+
+// Releasing the mouse
+function mouseReleased() {
+    dragging = null;
 }
 
 // Draws the background
@@ -162,16 +219,16 @@ function drawCookie() {
     noStroke();
 
     // Biscuit
-    fill("#debca0ff");
-    ellipse(100, 90, 80);
+    fill("#a67e5dff");
+    ellipse(cookie.x, cookie.y, cookie.r * 2);
 
     // Chips
     fill("#684c34ff");
-    ellipse(80, 80, 10);
-    ellipse(105, 65, 8);
-    ellipse(92, 105, 8);
-    ellipse(115, 85, 10);
-    ellipse(115, 108, 5);
+    ellipse(cookie.x - 20, cookie.y - 10, 10);
+    ellipse(cookie.x + 5, cookie.y - 25, 8);
+    ellipse(cookie.x - 8, cookie.y + 15, 8);
+    ellipse(cookie.x + 15, cookie.y - 5, 10);
+    ellipse(cookie.x + 15, cookie.y + 18, 5);
 
     pop();
 }
@@ -179,7 +236,12 @@ function drawCookie() {
 // Draws Spider - Head + Body + Legs
 function drawSpider() {
     push();
+
+    // Translate from original coordinates to new coordinates
+    translate(spider.x - 510, spider.y - 90);
+
     noFill();
+    stroke(0);
     strokeWeight(3);
 
     // Legs
@@ -223,12 +285,8 @@ function drawSpider() {
     quadraticVertex(530, 125, 520, 135);
     endShape();
 
-    pop();
-
     // Head + Body
-    push();
     noStroke();
-
     fill("#353535ff");
     ellipse(510, 80, 40);
     ellipse(510, 100, 20);
