@@ -30,6 +30,7 @@ let dragging = null;
 let grabOffsetX = 0;
 let grabOffsetY = 0;
 let isSmiling = false;
+let isSad = false;
 
 /**
  * Creates the canvas
@@ -49,8 +50,9 @@ function draw() {
     drawTorso();
     drawNeck();
 
-    // Update mouth state before drawing mouth which is in head
+    // Update mouth states before drawing head/mouth
     isSmiling = cookieTouchingHead();
+    isSad = spiderTouchingHead();
 
     drawHead();
     drawCookie();
@@ -203,7 +205,12 @@ function drawHead() {
     // Smile when cookie touches head
     if (isSmiling) {
         // Draw a smile
-        arc(300, 320, 60, 30, 0, PI, OPEN);
+        arc(300, 330, 40, 20, 0, PI, OPEN);
+    }
+    // Sad when spider touches head
+    else if (isSad) {
+        // Draw sad mouth
+        arc(300, 340, 40, 20, PI, TWO_PI, OPEN);
     }
     // If no cookie/spider on head
     else {
@@ -326,12 +333,23 @@ function drawSpider() {
 // Does cookie touch head?
 function cookieTouchingHead() {
 
-    // Head shape is circular when doing the checks
+    // Using y radius as head circle
     const headRadius = head.height / 2;
-    const cookieRadius = cookie.r;
 
     // If cookie and head are touching
-    if (dist(cookie.x, cookie.y, head.x, head.y) <= headRadius + cookieRadius) {
+    if (dist(cookie.x, cookie.y, head.x, head.y) <= headRadius + cookie.r) {
+        return true;
+    }
+}
+
+// Does spider touch head?
+function spiderTouchingHead() {
+
+    // Using y radius as head circle
+    const headRadius = head.height / 2;
+
+    // If spider and head are touching
+    if (dist(spider.x, spider.y, head.x, head.y) <= headRadius + spider.r) {
         return true;
     }
 }
