@@ -7,6 +7,14 @@
 
 "use strict";
 
+// Head info
+const head = {
+    x: 300,
+    y: 250,
+    width: 200,
+    height: 240,
+}
+
 // Draggable state of cookie & spider
 let cookie = {
     x: 100,
@@ -21,6 +29,7 @@ let spider = {
 let dragging = null;
 let grabOffsetX = 0;
 let grabOffsetY = 0;
+let isSmiling = false;
 
 /**
  * Creates the canvas
@@ -39,6 +48,10 @@ function draw() {
     drawBackground();
     drawTorso();
     drawNeck();
+
+    // Update mouth state before drawing mouth which is in head
+    isSmiling = cookieTouchingHead();
+
     drawHead();
     drawCookie();
     drawSpider();
@@ -57,7 +70,7 @@ function mousePressed() {
     else if (dist(mouseX, mouseY, spider.x, spider.y) <= spider.r) {
         dragging = "spider";
         grabOffsetX = mouseX - spider.x;
-        grabOffsetY - mouseY - spider.y;
+        grabOffsetY = mouseY - spider.y;
         return;
     }
     else {
@@ -147,7 +160,7 @@ function drawHead() {
     push();
     noStroke();
     fill("#d8b59fff");
-    ellipse(300, 250, 200, 240);
+    ellipse(head.x, head.y, head.width, head.height);
     pop();
 
     // Draw Eyes
@@ -185,7 +198,18 @@ function drawHead() {
     push();
     stroke("#d48587ff");
     strokeWeight(5);
-    line(290, 340, 310, 340);
+    noFill();
+
+    // Smile when cookie touches head
+    if (isSmiling) {
+        // Draw a smile
+        arc(300, 320, 60, 30, 0, PI, OPEN);
+    }
+    // If no cookie/spider on head
+    else {
+        // Draw neutral mouth
+        line(290, 340, 310, 340);
+    }
     pop();
 
     // Draw Hair
@@ -297,4 +321,17 @@ function drawSpider() {
     ellipse(513, 105, 3);
 
     pop();
+}
+
+// Does cookie touch head?
+function cookieTouchingHead() {
+
+    // Head shape is circular when doing the checks
+    const headRadius = head.height / 2;
+    const cookieRadius = cookie.r;
+
+    // If cookie and head are touching
+    if (dist(cookie.x, cookie.y, head.x, head.y) <= headRadius + cookieRadius) {
+        return true;
+    }
 }
