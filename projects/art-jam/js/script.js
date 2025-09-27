@@ -54,6 +54,9 @@ function draw() {
     isSmiling = cookieTouchingHead();
     isSad = spiderTouchingHead();
 
+    // Text above head
+    drawText();
+
     drawHead();
     drawCookie();
     drawSpider();
@@ -133,6 +136,28 @@ function drawNeck() {
     fill("#c5a591ff");
     rect(270, 355, 60, 50);
     triangle(270, 405, 330, 405, 300, 450);
+    pop();
+}
+
+// Draws Text above head
+function drawText() {
+    // Neutral message text
+    let message = "Trick or treat!\nWhich one will you give me?";
+    // If smiling
+    if (isSmiling) {
+        message = "That looks yummy!\nThanks for the treat!";
+    }
+    // If sad
+    else if (isSad) {
+        message = "Uh no thanks?\nKeep it to yourself.";
+    }
+
+    push();
+    noStroke();
+    textAlign(CENTER, BOTTOM);
+    textSize(16);
+    fill(30);
+    text(message, head.x, 70);
     pop();
 }
 
