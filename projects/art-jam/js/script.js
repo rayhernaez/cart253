@@ -17,13 +17,13 @@ const head = {
 
 // Draggable state of cookie & spider
 let cookie = {
-    x: 100,
-    y: 90,
+    x: 110,
+    y: 160,
     r: 40,
 };
 let spider = {
-    x: 510,
-    y: 90,
+    x: 490,
+    y: 160,
     r: 30,
 };
 let dragging = null;
