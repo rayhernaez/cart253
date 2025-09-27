@@ -32,6 +32,13 @@ let grabOffsetY = 0;
 let isSmiling = false;
 let isSad = false;
 
+let bgImage = undefined;
+
+// Load Halloween Background image
+function preload() {
+    bgImage = loadImage("assets/images/halloween-bg.png");
+}
+
 /**
  * Creates the canvas
 */
@@ -106,7 +113,10 @@ function mouseReleased() {
 
 // Draws the background
 function drawBackground() {
-    background("#e5e5e5ff");
+    // Draw background image to fill the canvas
+    image(bgImage, 0, 0);
+
+    // background("#e5e5e5ff");
 }
 
 // Draws Torso + Shirt
@@ -153,10 +163,12 @@ function drawText() {
     }
 
     push();
-    noStroke();
+    // noStroke();
+    strokeWeight(7);
+    stroke("black");
     textAlign(CENTER, BOTTOM);
-    textSize(16);
-    fill(30);
+    textSize(20);
+    fill("white");
     text(message, head.x, 70);
     pop();
 }
