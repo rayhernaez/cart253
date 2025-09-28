@@ -6,7 +6,7 @@ Ray Hernaez
 
 ## Description
 
-A playful self-portrait built with p5.js. Drag the **cookie** or the **spider** to my face to change my expression. The eyes follow your mouse.
+A p5.js self-portrait that shows a few things about me: I **like** cookies and **dislike** spiders. The Halloween background is there because I was born on Halloween. If I had more time, I’d update the artwork so I’m wearing a costume.
 
 ### Controls & Interaction
 
