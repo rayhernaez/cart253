@@ -58,7 +58,7 @@ Ray Hernaez
 
 ### 1. Intro Screen
 
-- Title
+- Title ✅
     - Info Button
         - Story + Instruction
         - Play Button
@@ -110,4 +110,4 @@ Ray Hernaez
 - Background music
 - Sky changes from day to night
     - Color changes gradually each kill
-
+- Change fonts
