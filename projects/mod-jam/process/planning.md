@@ -65,12 +65,12 @@ Ray Hernaez
 
 ### 2. Draw
 
-- 4 flies (red, blue, yellow, green)
+- 4 flies (red, blue, yellow, green) ✅
     - 🐞 | 🦋 | 🐝 | 🪲
-- 4 elemental projectiles (fire, water, air, earth)
+- 4 elemental projectiles (fire, water, air, earth) ✅
     - 🔥 | 💦 | 💨 | 🪨
-- Frog’s eyes + squint
-- Pond
+- Frog’s eyes + squint 
+- Pond ✅
 
 ### 3. Projectiles
 
