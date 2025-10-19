@@ -65,14 +65,45 @@ const frog = {
     }
 };
 
-// Our fly
-// Has a position, size, and speed of horizontal movement
-const fly = {
-    x: 0,
-    y: 200, // Will be random
-    size: 10,
-    speed: 3
-};
+// // Our fly
+// // Has a position, size, and speed of horizontal movement
+// const fly = {
+//     x: 0,
+//     y: 200, // Will be random
+//     size: 10,
+//     speed: 3
+// };
+
+// Pesky bugs info
+const maxActiveBugs = 3;
+const bugSize = 28;
+const bugHitRadius = bugSize * 0.35; // Hit collision
+const bugMinSpeed = 1;
+const bugMaxSpeed = 1.5;
+const bugSpawnX = 24; // Keep inside canvas
+
+// Bug types + emojis; collection of bugs
+const bugTypes = [
+    {
+        name: "red",
+        emoji: "🐞"
+    },
+    {
+        name: "blue",
+        emoji: "🦋"
+    },
+    {
+        name: "yellow",
+        emoji: "🐝"
+    },
+    {
+        name: "green",
+        emoji: "🪲"
+    }
+];
+
+// Active bugs array
+let bugs = [];
 
 /**
  * Creates the canvas and initializes the fly
@@ -80,8 +111,8 @@ const fly = {
 function setup() {
     createCanvas(canvas.w, canvas.h);
 
-    // Give the fly its first random position
-    resetFly();
+    // // Give the fly its first random position
+    // resetFly();
 }
 
 function draw() {
@@ -94,14 +125,6 @@ function draw() {
     else if (state === "play") {
         drawPlayScreen();
     }
-
-    // background("#87ceeb");
-    // moveFly();
-    // drawFly();
-    // moveFrog();
-    // moveTongue();
-    // drawFrog();
-    // checkTongueFlyOverlap();
 }
 
 // Draw title screen
@@ -181,17 +204,25 @@ function drawInfoScreen() {
     drawButton(buttons.playButton.x, buttons.playButton.y, buttons.playButton.w, buttons.playButton.h, "Play");
 }
 
-// Draw play screen
+// Draw play screen; actual gameplay
 function drawPlayScreen() {
-    // Actual gameplay
     background("#87ceeb");
     drawPond();
-    moveFly();
-    drawFly();
+    // moveFly();
+    // drawFly();
+
+    // Bug system
+    keepThreeActiveBugs();
+    updateBugs();
+    drawBugs();
+
     moveFrog();
     moveTongue();
     drawFrog();
-    checkTongueFlyOverlap();
+    // checkTongueFlyOverlap();
+
+    // Collision
+    checkTongueBugCollisions();
 }
 
 // Draw button
@@ -239,37 +270,103 @@ function mouseTouchingButton(mX, mY, bLeft, bTop, bWidth, bHeight) {
     }
 }
 
+// Always keep 3 bugs active
+function keepThreeActiveBugs() {
+    while (bugs.length < maxActiveBugs) {
+        spawnBug();
+    }
+}
+
+// Spawns a new bug at random x at the top
+function spawnBug() {
+    const type = random(bugTypes); // Random bug emoji
+    const x = random(bugSpawnX, width - bugSpawnX); // Random x
+    const y = -bugSize; // Just above the top to keep smooth spawn
+    const speed = random(bugMinSpeed, bugMaxSpeed); // Random speed
+
+    // Add new bug in array
+    bugs.push({
+        x,
+        y,
+        speed,
+        emoji: type.emoji,
+        name: type.name,
+        size: bugSize,
+        collision: bugHitRadius
+    });
+}
+
+// Bugs go down slowly
+function updateBugs() {
+    for (let i = bugs.length - 1; i >= 0; i--) {
+        const newBug = bugs[i];
+        newBug.y += newBug.speed;
+
+        // Remove if bug leaves the bottom screen
+        if (newBug.y > height + newBug.size) {
+            bugs.splice(i, 1);
+        }
+    }
+}
+
+// Draw bugs
+function drawBugs() {
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(bugSize);
+    noStroke();
+    for (const newBug of bugs) {
+        text(newBug.emoji, newBug.x, newBug.y);
+    }
+    pop();
+}
+
+// Check tongue + bug collision
+function checkTongueBugCollisions() {
+    for (let i = bugs.length - 1; i >= 0; i--) {
+        const newBug = bugs[i];
+        const distance = dist(frog.tongue.x, frog.tongue.y, newBug.x, newBug.y);
+        const tongueRadius = frog.tongue.size / 2;
+
+        if (distance < tongueRadius + newBug.collision) {
+            bugs.splice(i, 1); // remove bug
+            frog.tongue.state = "inbound"; // bring tongue back
+        }
+    }
+    keepThreeActiveBugs();
+}
+
 /**
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
-function moveFly() {
-    // Move the fly
-    fly.x += fly.speed;
-    // Handle the fly going off the canvas
-    if (fly.x > width) {
-        resetFly();
-    }
-}
+// function moveFly() {
+//     // Move the fly
+//     fly.x += fly.speed;
+//     // Handle the fly going off the canvas
+//     if (fly.x > width) {
+//         resetFly();
+//     }
+// }
 
 /**
  * Draws the fly as a black circle
  */
-function drawFly() {
-    push();
-    noStroke();
-    fill("#000000");
-    ellipse(fly.x, fly.y, fly.size);
-    pop();
-}
+// function drawFly() {
+//     push();
+//     noStroke();
+//     fill("#000000");
+//     ellipse(fly.x, fly.y, fly.size);
+//     pop();
+// }
 
 /**
  * Resets the fly to the left with a random y
  */
-function resetFly() {
-    fly.x = 0;
-    fly.y = random(0, 300);
-}
+// function resetFly() {
+//     fly.x = 0;
+//     fly.y = random(0, 300);
+// }
 
 /**
  * Moves the frog to the mouse position on x
@@ -335,18 +432,18 @@ function drawFrog() {
 /**
  * Handles the tongue overlapping the fly
  */
-function checkTongueFlyOverlap() {
-    // Get distance from tongue to fly
-    const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
-    // Check if it's an overlap
-    const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
-    if (eaten) {
-        // Reset the fly
-        resetFly();
-        // Bring back the tongue
-        frog.tongue.state = "inbound";
-    }
-}
+// function checkTongueFlyOverlap() {
+//     // Get distance from tongue to fly
+//     const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
+//     // Check if it's an overlap
+//     const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
+//     if (eaten) {
+//         // Reset the fly
+//         resetFly();
+//         // Bring back the tongue
+//         frog.tongue.state = "inbound";
+//     }
+// }
 
 /**
  * Handles mouse clicking depending on which screens user is on
