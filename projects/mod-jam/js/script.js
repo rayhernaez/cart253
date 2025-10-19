@@ -102,16 +102,8 @@ const frog = {
         y: 480,
         size: 150
     },
-    // // The frog's tongue has a position, size, speed, and state
-    // tongue: {
-    //     x: undefined,
-    //     y: 480,
-    //     size: 20,
-    //     speed: 20,
-    //     // Determines how the tongue moves each frame
-    //     state: "idle" // State can be: idle, outbound, inbound
-    // }
-    element: elementByName("earth"), // start as earth
+    // start as earth
+    element: elementByName("earth"),
     skinColour: elementByName("earth").skinColour
 };
 
@@ -297,6 +289,7 @@ function drawPlayScreen() {
     updateProjectiles();
     drawProjectiles();
     drawFrog();
+    drawFrogEyes();
 
     // Collision
     checkProjectileBugCollisions();
@@ -438,56 +431,59 @@ function moveFrog() {
 }
 
 /**
- * Handles moving the tongue based on its state
- */
-// function moveTongue() {
-//     // Tongue matches the frog's x
-//     frog.tongue.x = frog.body.x;
-//     // If the tongue is idle, it doesn't do anything
-//     if (frog.tongue.state === "idle") {
-//         // Do nothing
-//     }
-//     // If the tongue is outbound, it moves up
-//     else if (frog.tongue.state === "outbound") {
-//         frog.tongue.y += -frog.tongue.speed;
-//         // The tongue bounces back if it hits the top
-//         if (frog.tongue.y <= 0) {
-//             frog.tongue.state = "inbound";
-//         }
-//     }
-//     // If the tongue is inbound, it moves down
-//     else if (frog.tongue.state === "inbound") {
-//         frog.tongue.y += frog.tongue.speed;
-//         // The tongue stops if it hits the bottom
-//         if (frog.tongue.y >= height) {
-//             frog.tongue.state = "idle";
-//         }
-//     }
-// }
-
-/**
  * Displays the tongue (tip and line connection) and the frog (body)
  */
 function drawFrog() {
-    // // Draw the tongue tip
-    // push();
-    // fill("#ff0000");
-    // noStroke();
-    // ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
-    // pop();
-
-    // // Draw the rest of the tongue
-    // push();
-    // stroke("#ff0000");
-    // strokeWeight(frog.tongue.size);
-    // line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
-    // pop();
-
     // Draw the frog's body
     push();
     fill(frog.skinColour);
     noStroke();
     ellipse(frog.body.x, frog.body.y, frog.body.size);
+    pop();
+}
+
+function drawFrogEyes() {
+    // relative to frog's body
+    const eyeRadius = frog.body.size * 0.18;
+    const pupilRadius = eyeRadius * 0.45;
+    const spaceBetweenEyes = frog.body.size * 0.38;
+    const eyeY = frog.body.y - frog.body.size * 0.25;
+
+    const leftX = frog.body.x - spaceBetweenEyes / 2;
+    const rightX = frog.body.x + spaceBetweenEyes / 2;
+
+    const squint = (state === "play" && mouseIsPressed); //condition
+
+    if (squint) {
+        // Draw squint ><
+        push();
+        stroke(20);
+        strokeWeight(max(2, floor(eyeRadius * 0.35)));
+        noFill();
+        // Left eye as >
+        line(leftX - eyeRadius, eyeY - eyeRadius * 0.5, leftX + eyeRadius, eyeY);
+        line(leftX - eyeRadius, eyeY + eyeRadius * 0.5, leftX + eyeRadius, eyeY);
+        // Right eye as <
+        line(rightX + eyeRadius, eyeY - eyeRadius * 0.5, rightX - eyeRadius, eyeY);
+        line(rightX + eyeRadius, eyeY + eyeRadius * 0.5, rightX - eyeRadius, eyeY);
+        pop();
+        return;
+    }
+    else {
+        drawEyeWithPupil(leftX, eyeY, eyeRadius, pupilRadius);
+        drawEyeWithPupil(rightX, eyeY, eyeRadius, pupilRadius);
+    }
+}
+
+function drawEyeWithPupil(x, y, eyeRadius, pupilRadius) {
+    // Eyeball
+    push();
+    noStroke();
+    fill("white");
+    ellipse(x, y, eyeRadius * 2);
+    // Pupil
+    fill("black");
+    ellipse(x, y - 12, pupilRadius * 2);
     pop();
 }
 
@@ -516,10 +512,6 @@ function mousePressed() {
     }
     // if we're on play screen
     else if (state === "play") {
-        // // Launch the tongue on click
-        // if (frog.tongue.state === "idle") {
-        //     frog.tongue.state = "outbound";
-        // }
         launchProjectile();
     }
 }

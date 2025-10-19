@@ -69,23 +69,23 @@ Ray Hernaez
     - 🐞 | 🦋 | 🐝 | 🪲
 - 4 elemental projectiles (fire, water, air, earth) ✅
     - 🔥 | 💦 | 💨 | 🪨
-- Frog’s eyes + squint 
+- Frog’s eyes + squint ✅
 - Pond ✅
 
 ### 3. Projectiles
 
-- W, F, A, E keys
+- W, F, A, E keys ✅
     - Switch elemental projectile
     - Switch frog’s skin color
-- Mouse moves the frog
-- Mouse clicks uses projectile
+- Mouse moves the frog ✅
+- Mouse clicks uses projectile ✅
 
 ### 4. Flies
 
 - 4 different fly movements
     - Slowly going down
-- Flies at random color (red, yellow, blue, green)
-- 3 flies at a time
+- Flies at random color (red, yellow, blue, green) ✅
+- 3 flies at a time ✅
 - Max 15 flies
 
 ### 5. Hits
