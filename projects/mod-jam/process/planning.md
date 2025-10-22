@@ -82,17 +82,17 @@ Ray Hernaez
 
 ### 4. Flies
 
-- 4 different fly movements
+- 4 different fly movements ✅
     - Slowly going down
 - Flies at random color (red, yellow, blue, green) ✅
-- 3 flies at a time ✅
+- 2 flies at a time ✅
 - Max 15 flies
 
 ### 5. Hits
 
 - specific elemental attacks only work for specific fly color
-- 3 hits per fly before dying
-- After one dies, another appears on top going down
+- 1 hit per fly before dying
+- After one dies, another appears on top going down ✅
 
 ### 6. Score
 

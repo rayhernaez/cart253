@@ -149,11 +149,11 @@ function drawProjectiles() {
 }
 
 // Pesky bugs info
-const maxActiveBugs = 3;
+const maxActiveBugs = 2;
 const bugSize = 28;
 const bugHitRadius = bugSize * 0.35; // Hit collision
-const bugMinSpeed = 1;
-const bugMaxSpeed = 1.5;
+const bugMinSpeed = 0.3;
+const bugMaxSpeed = 0.5;
 const bugSpawnX = 24; // Keep inside canvas
 
 // Bug types + emojis; collection of bugs
@@ -281,7 +281,7 @@ function drawPlayScreen() {
     drawPond();
 
     // Bug system
-    keepThreeActiveBugs();
+    keepActiveBugs();
     updateBugs();
     drawBugs();
 
@@ -341,7 +341,7 @@ function mouseTouchingButton(mX, mY, bLeft, bTop, bWidth, bHeight) {
 }
 
 // Always keep 3 bugs active
-function keepThreeActiveBugs() {
+function keepActiveBugs() {
     while (bugs.length < maxActiveBugs) {
         spawnBug();
     }
@@ -352,25 +352,71 @@ function spawnBug() {
     const type = random(bugTypes); // Random bug emoji
     const x = random(bugSpawnX, width - bugSpawnX); // Random x
     const y = -bugSize; // Just above the top to keep smooth spawn
-    const speed = random(bugMinSpeed, bugMaxSpeed); // Random speed
+    const speedY = random(bugMinSpeed, bugMaxSpeed); // Random speed
 
-    // Add new bug in array
-    bugs.push({
+    const bug = {
+        name: type.name,
+        emoji: type.emoji,
         x,
         y,
-        speed,
-        emoji: type.emoji,
-        name: type.name,
+        // Bug's center base x position
+        baseX: x,
+        speedY,
         size: bugSize,
-        collision: bugHitRadius
-    });
+        collision: bugHitRadius,
+        // Movement is either buzz or zigzag
+        movement: undefined
+    };
+
+    // If bug is yellow or red
+    if (bug.name === "yellow" || bug.name === "red") {
+        // It buzzes
+        bug.movement = "buzz";
+        // Adds shaky movement
+        bug.shake = 3.5;
+    }
+    // If bug is blue or green
+    else if (bug.name === "blue" || bug.name === "green") {
+        // It zigzags
+        bug.movement = "zigzag";
+        // Adds sideway speed
+        bug.speedX = random(1, 3);
+        // Adds min-max x position that it travels based on its center position
+        bug.minX = bug.baseX - 50;
+        bug.maxX = bug.baseX + 50;
+    }
+
+    // Add new bug in array
+    bugs.push(bug);
 }
 
 // Bugs go down slowly
 function updateBugs() {
     for (let i = bugs.length - 1; i >= 0; i--) {
         const newBug = bugs[i];
-        newBug.y += newBug.speed;
+        // Slowly descent
+        newBug.y += newBug.speedY;
+
+        // If bug is buzzing
+        if (newBug.movement === "buzz") {
+            // Make it buzz!
+            newBug.x += random(-newBug.shake, newBug.shake);
+            newBug.y += random(-newBug.shake, newBug.shake);
+            // Keep inside canvas
+            newBug.x = constrain(newBug.x, bugSpawnX, width - bugSpawnX);
+        }
+        // If bug is zagzagging
+        else if (newBug.movement === "zigzag") {
+            // Make it move sideways
+            newBug.x += newBug.speedX;
+            // If it hits constrains x position
+            if (newBug.x < newBug.minX || newBug.x > newBug.maxX) {
+                // It goes back
+                newBug.speedX *= -1;
+                // Keep it constrained!
+                newBug.x = constrain(newBug.x, newBug.minX, newBug.maxX);
+            }
+        }
 
         // Remove if bug leaves the bottom screen
         if (newBug.y > height + newBug.size) {
@@ -391,21 +437,6 @@ function drawBugs() {
     pop();
 }
 
-// Check tongue + bug collision
-function checkTongueBugCollisions() {
-    for (let i = bugs.length - 1; i >= 0; i--) {
-        const newBug = bugs[i];
-        const distance = dist(frog.tongue.x, frog.tongue.y, newBug.x, newBug.y);
-        const tongueRadius = frog.tongue.size / 2;
-
-        if (distance < tongueRadius + newBug.collision) {
-            bugs.splice(i, 1); // remove bug
-            frog.tongue.state = "inbound"; // bring tongue back
-        }
-    }
-    keepThreeActiveBugs();
-}
-
 // Check projectile + bug collision
 function checkProjectileBugCollisions() {
     for (let i = bugs.length - 1; i >= 0; i--) {
@@ -420,7 +451,7 @@ function checkProjectileBugCollisions() {
             }
         }
     }
-    keepThreeActiveBugs();
+    keepActiveBugs();
 }
 
 /**
@@ -507,7 +538,7 @@ function mousePressed() {
             // fresh start
             bugs = [];
             projectiles = [];
-            keepThreeActiveBugs();
+            keepActiveBugs();
         }
     }
     // if we're on play screen
