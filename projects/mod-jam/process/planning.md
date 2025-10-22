@@ -86,12 +86,12 @@ Ray Hernaez
     - Slowly going down
 - Flies at random color (red, yellow, blue, green) ✅
 - 2 flies at a time ✅
-- Max 15 flies
+- Max 15 flies ✅
 
 ### 5. Hits
 
 - specific elemental attacks only work for specific fly color
-- 1 hit per fly before dying
+- 2 hits per fly before dying ✅
 - After one dies, another appears on top going down ✅
 
 ### 6. Score

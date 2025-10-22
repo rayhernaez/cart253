@@ -155,6 +155,8 @@ const bugHitRadius = bugSize * 0.35; // Hit collision
 const bugMinSpeed = 0.3;
 const bugMaxSpeed = 0.5;
 const bugSpawnX = 24; // Keep inside canvas
+const maxBugsTotal = 15; // 15 bugs to defeat
+let numberOfBugsSpawned = 0;
 
 // Bug types + emojis; collection of bugs
 const bugTypes = [
@@ -178,6 +180,9 @@ const bugTypes = [
 
 // Active bugs array
 let bugs = [];
+
+// How long a bug stays shrunk after being hit, in frames
+const hurtFrames = 8;
 
 /**
  * Creates the canvas and initializes the fly
@@ -340,9 +345,9 @@ function mouseTouchingButton(mX, mY, bLeft, bTop, bWidth, bHeight) {
     }
 }
 
-// Always keep 3 bugs active
+// Always keep 3 bugs active & limit to 15 bugs in total
 function keepActiveBugs() {
-    while (bugs.length < maxActiveBugs) {
+    while (bugs.length < maxActiveBugs && numberOfBugsSpawned < maxBugsTotal) {
         spawnBug();
     }
 }
@@ -365,7 +370,11 @@ function spawnBug() {
         size: bugSize,
         collision: bugHitRadius,
         // Movement is either buzz or zigzag
-        movement: undefined
+        movement: undefined,
+        // 2 hits to defeat a bug
+        hitsLeft: 2,
+        // Countdown while hurt
+        hurtFrames: 0
     };
 
     // If bug is yellow or red
@@ -380,7 +389,7 @@ function spawnBug() {
         // It zigzags
         bug.movement = "zigzag";
         // Adds sideway speed
-        bug.speedX = random(1, 3);
+        bug.speedX = random(1, 2);
         // Adds min-max x position that it travels based on its center position
         bug.minX = bug.baseX - 50;
         bug.maxX = bug.baseX + 50;
@@ -388,12 +397,20 @@ function spawnBug() {
 
     // Add new bug in array
     bugs.push(bug);
+    // Increase number of bugs spawned by 1
+    numberOfBugsSpawned += 1;
 }
 
 // Bugs go down slowly
 function updateBugs() {
     for (let i = bugs.length - 1; i >= 0; i--) {
         const newBug = bugs[i];
+
+        // Countdown active shrunk state
+        if (newBug.hurtFrames > 0) {
+            newBug.hurtFrames -= 1;
+        }
+
         // Slowly descent
         newBug.y += newBug.speedY;
 
@@ -432,6 +449,18 @@ function drawBugs() {
     textSize(bugSize);
     noStroke();
     for (const newBug of bugs) {
+        let scale = undefined;
+        // If bug is hurt
+        if (newBug.hurtFrames > 0) {
+            // It shrinks
+            scale = 0.5;
+        }
+        // If not hurt
+        else {
+            // Normal size
+            scale = 1;
+        }
+        textSize(newBug.size * scale);
         text(newBug.emoji, newBug.x, newBug.y);
     }
     pop();
@@ -445,8 +474,16 @@ function checkProjectileBugCollisions() {
             const projectile = projectiles[j];
             const distance = dist(projectile.x, projectile.y, newBug.x, newBug.y);
             if (distance < projectile.collision + newBug.collision) {
-                bugs.splice(i, 1);
+                // Update hitsLeft if hit
+                newBug.hitsLeft -= 1;
+                // Trigger bug shrinking
+                newBug.hurtFrames = hurtFrames;
                 projectiles.splice(j, 1);
+                // If bug is hit twice
+                if (newBug.hitsLeft <= 0) {
+                    // Bug is a goner
+                    bugs.splice(i, 1);
+                }
                 break;
             }
         }
@@ -535,9 +572,10 @@ function mousePressed() {
         }
         if (mouseTouchingButton(mouseX, mouseY, buttons.playButton.x, buttons.playButton.y, buttons.playButton.w, buttons.playButton.h)) {
             state = "play";
-            // fresh start
+            // Start new game
             bugs = [];
             projectiles = [];
+            numberOfBugsSpawned = 0; // Reset total spawn
             keepActiveBugs();
         }
     }
