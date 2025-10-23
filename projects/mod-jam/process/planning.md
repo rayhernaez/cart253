@@ -90,13 +90,15 @@ Ray Hernaez
 
 ### 5. Hits
 
-- specific elemental attacks only work for specific fly color
+- specific elemental attacks only work for specific fly color ✅
 - 2 hits per fly before dying ✅
 - After one dies, another appears on top going down ✅
 
 ### 6. Score
 
-- Killing 3 flies make the projectile size bigger
+- Killing 3 flies make the projectile size bigger ❌
+- Sky changes from day to night
+    - Color changes gradually each kill
 
 ### 7. Ending
 
@@ -110,6 +112,4 @@ Ray Hernaez
 - Frogs eyes squint when casting a projectile
 - Sounds effects on frog attack voice, elemental hit sound, fly dies sound
 - Background music
-- Sky changes from day to night
-    - Color changes gradually each kill
 - Change fonts

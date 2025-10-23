@@ -158,6 +158,28 @@ const bugSpawnX = 24; // Keep inside canvas
 const maxBugsTotal = 15; // 15 bugs to defeat
 let numberOfBugsSpawned = 0;
 
+// Bugs defeated
+let bugsDefeated = 0;
+
+// 15 Sky colours from day to night
+const skyColours = [
+    "#87CEEB",
+    "#79B8E6",
+    "#6BA2E1",
+    "#5D8CDC",
+    "#4F76D7",
+    "#4261D1",
+    "#384FBE",
+    "#2E3EAB",
+    "#273498",
+    "#212A86",
+    "#1B216F",
+    "#16195A",
+    "#121246",
+    "#0E0C34",
+    "#0A0724"
+];
+
 // Bug types + emojis; collection of bugs
 const bugTypes = [
     {
@@ -177,6 +199,14 @@ const bugTypes = [
         emoji: "🪲"
     }
 ];
+
+// Bug type weakness mapping to element that can hurt it
+const bugWeakness = {
+    blue: "water",
+    green: "earth",
+    red: "fire",
+    yellow: "air"
+}
 
 // Active bugs array
 let bugs = [];
@@ -282,7 +312,10 @@ function drawInfoScreen() {
 
 // Draw play screen; actual gameplay
 function drawPlayScreen() {
-    background("#87ceeb");
+    // 15 sky colours only
+    const skyIndex = constrain(bugsDefeated, 0, skyColours.length - 1);
+    background(skyColours[skyIndex]);
+
     drawPond();
 
     // Bug system
@@ -374,7 +407,9 @@ function spawnBug() {
         // 2 hits to defeat a bug
         hitsLeft: 2,
         // Countdown while hurt
-        hurtFrames: 0
+        hurtFrames: 0,
+        // Bug weakness
+        weakTo: bugWeakness[type.name]
     };
 
     // If bug is yellow or red
@@ -474,15 +509,22 @@ function checkProjectileBugCollisions() {
             const projectile = projectiles[j];
             const distance = dist(projectile.x, projectile.y, newBug.x, newBug.y);
             if (distance < projectile.collision + newBug.collision) {
-                // Update hitsLeft if hit
-                newBug.hitsLeft -= 1;
-                // Trigger bug shrinking
-                newBug.hurtFrames = hurtFrames;
+                // Remove projectile
                 projectiles.splice(j, 1);
-                // If bug is hit twice
-                if (newBug.hitsLeft <= 0) {
-                    // Bug is a goner
-                    bugs.splice(i, 1);
+
+                // Hit only if element matches bug's weakness
+                if (projectile.element === newBug.weakTo) {
+                    // Update hitsLeft if hit
+                    newBug.hitsLeft -= 1;
+                    // Trigger bug shrinking
+                    newBug.hurtFrames = hurtFrames;
+                    // If bug is hit twice
+                    if (newBug.hitsLeft <= 0) {
+                        // Bug is a goner
+                        bugs.splice(i, 1);
+                        // Record bug kill
+                        bugsDefeated = constrain(bugsDefeated + 1, 0, maxBugsTotal);
+                    }
                 }
                 break;
             }
@@ -576,6 +618,7 @@ function mousePressed() {
             bugs = [];
             projectiles = [];
             numberOfBugsSpawned = 0; // Reset total spawn
+            bugsDefeated = 0; // Reset to day sky
             keepActiveBugs();
         }
     }
