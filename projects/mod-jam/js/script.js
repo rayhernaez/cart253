@@ -43,6 +43,12 @@ const buttons = {
         y: canvas.h - 70,
         w: 160,
         h: 50
+    },
+    playAgainButton: {
+        x: canvas.w / 2 - 80,
+        y: canvas.h - 70,
+        w: 160,
+        h: 50
     }
 };
 
@@ -214,6 +220,10 @@ let bugs = [];
 // How long a bug stays shrunk after being hit, in frames
 const hurtFrames = 8;
 
+// Ending freeze time for 5 seconds
+let endStartTime = 0;
+const endDelay = 5000; // millisecond
+
 /**
  * Creates the canvas and initializes the fly
  */
@@ -230,6 +240,12 @@ function draw() {
     }
     else if (state === "play") {
         drawPlayScreen();
+    }
+    else if (state === "win") {
+        drawWinScreen();
+    }
+    else if (state === "fail") {
+        drawFailScreen();
     }
 }
 
@@ -331,6 +347,12 @@ function drawPlayScreen() {
 
     // Collision
     checkProjectileBugCollisions();
+
+    // If all 15 bugs are defeated
+    if (bugsDefeated >= maxBugsTotal) {
+        state = "win";
+        endStartTime = millis();
+    }
 }
 
 // Draw button
@@ -378,7 +400,7 @@ function mouseTouchingButton(mX, mY, bLeft, bTop, bWidth, bHeight) {
     }
 }
 
-// Always keep 3 bugs active & limit to 15 bugs in total
+// Keep 2 bugs active & limit to 15 bugs in total
 function keepActiveBugs() {
     while (bugs.length < maxActiveBugs && numberOfBugsSpawned < maxBugsTotal) {
         spawnBug();
@@ -444,6 +466,14 @@ function updateBugs() {
         // Countdown active shrunk state
         if (newBug.hurtFrames > 0) {
             newBug.hurtFrames -= 1;
+        }
+
+        // if bug reaches the pond
+        if (newBug.y >= height - 60) {
+            state = "fail";
+            endStartTime = millis();
+            // Stop updating
+            return;
         }
 
         // Slowly descent
@@ -597,6 +627,68 @@ function drawEyeWithPupil(x, y, eyeRadius, pupilRadius) {
     pop();
 }
 
+// Draw win screen
+function drawWinScreen() {
+    // Keep last sky colour
+    background(skyColours[skyColours.length - 1]);
+    drawPond();
+
+    push();
+    textAlign(CENTER, CENTER);
+    textFont("Georgia");
+    stroke(0);
+    strokeWeight(6);
+    fill("#00e676");
+    textSize(64);
+    text("SUCCESS!", width / 2, height / 2 - 20);
+
+    noStroke();
+    fill(255);
+    textSize(20);
+    text("Froggy has saved the pond from pesky bugs!", width / 2, height / 2 + 30);
+    pop();
+
+    // After 5 seconds, show Play Again button
+    if (millis() - endStartTime >= endDelay) {
+        drawButton(buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h, "Play Again");
+    }
+}
+
+// Draw fail screen
+function drawFailScreen() {
+    background("#100A1A");
+    drawPond();
+
+    push();
+    textAlign(CENTER, CENTER);
+    textFont("Georgia");
+    stroke(0);
+    strokeWeight(6);
+    fill("#ff5252");
+    textSize(64);
+    text("FAIL!", width / 2, height / 2 - 20);
+
+    noStroke();
+    fill(255);
+    textSize(20);
+    text("A bug reached the pond...", width / 2, height / 2 + 30);
+    pop();
+
+    // After 5 seconds, show Play Again button
+    if (millis() - endStartTime >= endDelay) {
+        drawButton(buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h, "Play Again");
+    }
+}
+
+// Reset everything to start a fresh game
+function resetGame() {
+    state = "title";
+    bugs = [];
+    projectile = [];
+    numberOfBugsSpawned = 0;
+    bugsDefeated = 0;
+}
+
 /**
  * Handles mouse clicking depending on which screens user is on
  */
@@ -625,6 +717,14 @@ function mousePressed() {
     // if we're on play screen
     else if (state === "play") {
         launchProjectile();
+    }
+    // Only click Play Again button after 5 seconds
+    else if (state === "win" || state === "fail") {
+        if (millis() - endStartTime >= endDelay) {
+            if (mouseTouchingButton(mouseX, mouseY, buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h)) {
+                resetGame();
+            }
+        }
     }
 }
 

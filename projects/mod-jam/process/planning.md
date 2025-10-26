@@ -97,19 +97,19 @@ Ray Hernaez
 ### 6. Score
 
 - Killing 3 flies make the projectile size bigger ❌
-- Sky changes from day to night
+- Sky changes from day to night ✅
     - Color changes gradually each kill
 
 ### 7. Ending
 
-- Win after defeating all 15 flies
-- Lose if one fly reaches pond
-- Gameover message
+- Win after defeating all 15 flies ✅
+- Lose if one fly reaches pond ✅
+- Gameover message ✅
     - Back to title page 
 
 ### 8. Visuals + Sounds
 
-- Frogs eyes squint when casting a projectile
+- Frogs eyes squint when casting a projectile ✅
 - Sounds effects on frog attack voice, elemental hit sound, fly dies sound
 - Background music
 - Change fonts
