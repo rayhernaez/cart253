@@ -297,16 +297,22 @@ function drawInfoScreen() {
     // Story text
     const story =
         "Froggy is the new Avatar and can bend all four elements: Water, Earth, Fire, Air. \n" +
-        "He must stop pesky flies before they reach the pond. \n\n" +
-        "Use the matching element to defeat each coloured fly. \n" +
-        "Water 💦 against blue flies; Earth 🪨 against green flies; \n" +
-        "Fire 🔥 against red flies; Air 💨 against yellow flies.";
-
-    const controls =
+        "He must stop pesky bugs before they reach the pond. \n\n" +
+        "Match element to defeat each coloured fly. \n" +
+        "Water 💦 against blue bugs 🦋 \n" +
+        "Earth 🪨 against green bugs 🪲 \n" +
+        "Fire 🔥 against red bugs 🐞 \n" +
+        "Air 💨 against yellow bugs 🐝 \n\n" +
         "Controls: \n" +
-        "Move Froggy with your mouse and click to attack! \n" +
+        "Move Froggy with your mouse \n" +
+        "and Click to attack!";
+
+    const switchElem =
         "Switch elements by pressing keys: \n" +
-        "W key (💦); E key (🪨); F key (🔥); A key (💨).";
+        "W key (💦) \n" +
+        "E key (🪨) \n" +
+        "F key (🔥) \n" +
+        "A key (💨)";
 
     push();
     textAlign(LEFT, TOP);
@@ -315,8 +321,8 @@ function drawInfoScreen() {
     noStroke();
     fill(20);
     textLeading(22);
-    text(story, 24, 120, width - 48, 140);
-    text(controls, 24, 280, width - 48, 200);
+    text(story, 24, 120, width - 48, 400);
+    text(switchElem, 350, 185, width - 48, 200);
     pop();
 
     // Back button

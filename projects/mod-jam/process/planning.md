@@ -110,6 +110,6 @@ Ray Hernaez
 ### 8. Visuals + Sounds
 
 - Frogs eyes squint when casting a projectile ✅
-- Sounds effects on frog attack voice, elemental hit sound, fly dies sound
-- Background music
+- Sounds effects ❌
+- Fix UI ✅
 - Change fonts
