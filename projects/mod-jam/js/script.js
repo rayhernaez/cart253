@@ -24,6 +24,9 @@ const canvas = {
     h: 480
 };
 
+// Font to use on Title
+let fontTitle = undefined;
+
 // Menu buttons
 const buttons = {
     infoButton: {
@@ -224,6 +227,11 @@ const hurtFrames = 8;
 let endStartTime = 0;
 const endDelay = 5000; // millisecond
 
+// Load font
+function preload() {
+    fontTitle = loadFont("assets/fonts/Bestime.ttf");
+}
+
 /**
  * Creates the canvas and initializes the fly
  */
@@ -258,7 +266,7 @@ function drawTitleScreen() {
     push();
     textAlign(CENTER, TOP);
     textSize(48);
-    textFont("Georgia");
+    textFont(fontTitle);
     stroke(0);
     strokeWeight(6);
     fill("#00c853");
@@ -269,7 +277,7 @@ function drawTitleScreen() {
     push();
     textAlign(CENTER, TOP);
     textSize(16);
-    textFont("Georgia");
+    textFont(fontTitle);
     noStroke();
     fill(0);
     text("made by Ray Hernaez", width / 2, 150);
@@ -288,7 +296,7 @@ function drawInfoScreen() {
     push();
     textAlign(LEFT, TOP);
     textSize(28);
-    textFont("Georgia");
+    textFont(fontTitle);
     noStroke();
     fill("#1b5e20");
     text("Game Info", 24, 70);
@@ -377,7 +385,7 @@ function drawButton(x, y, w, h, label) {
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(20);
-    textFont("Georgia");
+    textFont(fontTitle);
     text(label, x + w / 2, y + h / 2 + 1);
     pop();
 }
@@ -641,13 +649,14 @@ function drawWinScreen() {
 
     push();
     textAlign(CENTER, CENTER);
-    textFont("Georgia");
+    textFont(fontTitle);
     stroke(0);
     strokeWeight(6);
     fill("#00e676");
     textSize(64);
     text("SUCCESS!", width / 2, height / 2 - 20);
 
+    textFont("Georgia");
     noStroke();
     fill(255);
     textSize(20);
@@ -667,13 +676,14 @@ function drawFailScreen() {
 
     push();
     textAlign(CENTER, CENTER);
-    textFont("Georgia");
+    textFont(fontTitle);
     stroke(0);
     strokeWeight(6);
     fill("#ff5252");
     textSize(64);
     text("FAIL!", width / 2, height / 2 - 20);
 
+    textFont("Georgia");
     noStroke();
     fill(255);
     textSize(20);
@@ -690,7 +700,7 @@ function drawFailScreen() {
 function resetGame() {
     state = "title";
     bugs = [];
-    projectile = [];
+    projectiles = [];
     numberOfBugsSpawned = 0;
     bugsDefeated = 0;
 }

@@ -112,4 +112,5 @@ Ray Hernaez
 - Frogs eyes squint when casting a projectile ✅
 - Sounds effects ❌
 - Fix UI ✅
-- Change fonts
+- Change fonts ✅
+- Bug to kill counter
