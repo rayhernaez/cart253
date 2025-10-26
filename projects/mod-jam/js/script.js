@@ -188,9 +188,26 @@ function setup() {
 }
 
 /**
+ * Update cursor
+ */
+function updateCursor() {
+    if (state === "play") {
+        // Hide cursor on play
+        noCursor();
+    }
+    else {
+        // Show cursor
+        cursor();
+    }
+}
+
+/**
  * Draws the current screen
  */
 function draw() {
+    // Cursor visibility
+    updateCursor();
+
     if (state === "title") {
         drawTitleScreen();
     }
