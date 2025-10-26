@@ -27,6 +27,11 @@ const canvas = {
 // Font to use on Title
 let fontTitle = undefined;
 
+// Load font
+function preload() {
+    fontTitle = loadFont("assets/fonts/Bestime.ttf");
+}
+
 // Menu buttons
 const buttons = {
     infoButton: {
@@ -227,11 +232,6 @@ const hurtFrames = 8;
 let endStartTime = 0;
 const endDelay = 5000; // millisecond
 
-// Load font
-function preload() {
-    fontTitle = loadFont("assets/fonts/Bestime.ttf");
-}
-
 /**
  * Creates the canvas and initializes the fly
  */
@@ -266,7 +266,7 @@ function drawTitleScreen() {
     push();
     textAlign(CENTER, TOP);
     textSize(48);
-    textFont(fontTitle);
+    textFont(fontTitle || "Georgia");
     stroke(0);
     strokeWeight(6);
     fill("#00c853");
@@ -277,7 +277,7 @@ function drawTitleScreen() {
     push();
     textAlign(CENTER, TOP);
     textSize(16);
-    textFont(fontTitle);
+    textFont(fontTitle || "Georgia");
     noStroke();
     fill(0);
     text("made by Ray Hernaez", width / 2, 150);
@@ -296,7 +296,7 @@ function drawInfoScreen() {
     push();
     textAlign(LEFT, TOP);
     textSize(28);
-    textFont(fontTitle);
+    textFont(fontTitle || "Georgia");
     noStroke();
     fill("#1b5e20");
     text("Game Info", 24, 70);
@@ -359,6 +359,9 @@ function drawPlayScreen() {
     drawFrog();
     drawFrogEyes();
 
+    // Small bug counter
+    drawBugsLeftCounter();
+
     // Collision
     checkProjectileBugCollisions();
 
@@ -367,6 +370,19 @@ function drawPlayScreen() {
         state = "win";
         endStartTime = millis();
     }
+}
+
+// Draw Bugs Left counter
+function drawBugsLeftCounter() {
+    const bugsLeft = maxBugsTotal - bugsDefeated;
+    push();
+    textFont(fontTitle || "Georgia");
+    textSize(16);
+    fill(255);
+    strokeWeight(3);
+    textAlign(LEFT, TOP);
+    text(bugsLeft + " bugs left!", 12, 12);
+    pop();
 }
 
 // Draw button
@@ -385,7 +401,7 @@ function drawButton(x, y, w, h, label) {
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(20);
-    textFont(fontTitle);
+    textFont(fontTitle || "Georgia");
     text(label, x + w / 2, y + h / 2 + 1);
     pop();
 }
@@ -649,7 +665,7 @@ function drawWinScreen() {
 
     push();
     textAlign(CENTER, CENTER);
-    textFont(fontTitle);
+    textFont(fontTitle || "Georgia");
     stroke(0);
     strokeWeight(6);
     fill("#00e676");
@@ -676,7 +692,7 @@ function drawFailScreen() {
 
     push();
     textAlign(CENTER, CENTER);
-    textFont(fontTitle);
+    textFont(fontTitle || "Georgia");
     stroke(0);
     strokeWeight(6);
     fill("#ff5252");

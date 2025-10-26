@@ -113,4 +113,4 @@ Ray Hernaez
 - Sounds effects ❌
 - Fix UI ✅
 - Change fonts ✅
-- Bug to kill counter
+- Bug to kill counter ✅
