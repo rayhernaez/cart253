@@ -404,9 +404,9 @@ function drawInfoScreen() {
         "Earth 🪨 against green bugs 🪲 \n" +
         "Fire 🔥 against red bugs 🐞 \n" +
         "Air 💨 against yellow bugs 🐝 \n\n" +
-        "Controls: \n" +
         "Move Froggy with your mouse \n" +
-        "and Click to attack!";
+        "Click to attack \n" +
+        "Hit a bug twice to defeat them!";
 
     const switchElem =
         "Switch elements by pressing keys: \n" +

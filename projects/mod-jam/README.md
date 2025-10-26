@@ -4,9 +4,6 @@ Ray Hernaez
 
 [Play it!](https://rayhernaez.github.io/cart253/projects/mod-jam/index.html)
 
-- [Ideas](./process/ideas.md)
-- [Planning](./process/planning.md)
-
 ## Description
 
 A mini p5.js game that is a modified version of [frogfrogfrog](https://pippinbarr.com/cart253/topics/making/examples/frogfrogfrog.zip). Froggy is the new Avatar (inspired by Avatar: The Last Airbender) and he can bend all 4 elements (Water, Earth, Fire, Air). Bugs are swarming down to his beloved pond. Use elemental attacks to stop them! There are 15 bugs in total. Each kill changes the sky colour which transitions from day to night.
@@ -15,6 +12,7 @@ A mini p5.js game that is a modified version of [frogfrogfrog](https://pippinbar
 
 - Move Froggy with your mouse
 - Click mouse to attack
+    - Hit a bug twice to defeat them
 - Switch element:
     - W = Water 💦 (against Blue Bugs 🦋)
     - E = Earth 🪨 (against Green Bugs 🪲)
@@ -39,7 +37,7 @@ A mini p5.js game that is a modified version of [frogfrogfrog](https://pippinbar
     - Bugs shrink when hit
 - New features:
     - Use of W/E/F/A keys to switch elements
-    - Use of emojis to drae elements + bugs
+    - Use of emojis to draw elements + bugs
     - Use of buttons
 
 ## New p5 functions I tried
