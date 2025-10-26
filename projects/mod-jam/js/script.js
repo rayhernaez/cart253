@@ -2,12 +2,13 @@
  * Mod Jam - Froggy, the Avatar
  * Ray Hernaez
  * 
- * A game of catching flies with your frog-tongue
+ * A game of defeating bugs
+ * using elemental attacks
  * 
  * Instructions:
  * - Move the frog with your mouse
- * - Click to launch the tongue
- * - Catch flies
+ * - Click to launch elemental attack
+ * - Defeat 15 bugs in total
  * 
  * Made with p5
  * https://p5js.org/
@@ -15,7 +16,7 @@
 
 "use strict";
 
-// State of the game: title | info | play
+// State of the game
 let state = "title";
 
 // Canvas size
@@ -26,11 +27,6 @@ const canvas = {
 
 // Font to use on Title
 let fontTitle = undefined;
-
-// Load font
-function preload() {
-    fontTitle = loadFont("assets/fonts/Bestime.ttf");
-}
 
 // Menu buttons
 const buttons = {
@@ -88,111 +84,40 @@ const elementTypes = [
     }
 ];
 
-// 
-function elementByName(name) {
-    for (const element of elementTypes) {
-        if (element.name === name) {
-            return element; // found a match
-        }
-    }
-    return undefined; // no match found
-}
-
-// 
-function elementByKey(key) {
-    for (const element of elementTypes) {
-        if (element.key === key) {
-            return element; // found a match
-        }
-    }
-    return undefined; // no match found
+// Map bug type weakness to element that can hit it
+const bugWeakness = {
+    blue: "water",
+    green: "earth",
+    red: "fire",
+    yellow: "air"
 }
 
 // Our frog
 const frog = {
-    // The frog's body has a position and size
     body: {
         x: 320,
         y: 480,
         size: 150
     },
-    // start as earth
+    // Starts as earth
     element: elementByName("earth"),
     skinColour: elementByName("earth").skinColour
 };
 
 // Elemental projectiles
 let projectiles = [];
-
 const projectileSize = 26;
 const projectileSpeed = 7;
 const projectileHitRadius = projectileSize * 0.35;
 
-function launchProjectile() {
-    const element = frog.element;
-    projectiles.push({
-        x: frog.body.x,
-        y: frog.body.y - frog.body.size * 0.45,
-        speed: -projectileSpeed,
-        element: element.name,
-        emoji: element.emoji,
-        size: projectileSize,
-        collision: projectileHitRadius
-    });
-}
-
-function updateProjectiles() {
-    for (let i = projectiles.length - 1; i >= 0; i--) {
-        const projectile = projectiles[i];
-        projectile.y += projectile.speed;
-        if (projectile.y < -projectile.size) {
-            projectiles.splice(i, 1);
-        }
-    }
-}
-
-function drawProjectiles() {
-    push();
-    textAlign(CENTER, CENTER);
-    textSize(projectileSize);
-    noStroke();
-    for (const projectile of projectiles) {
-        text(projectile.emoji, projectile.x, projectile.y);
-    }
-    pop();
-}
-
-// Pesky bugs info
+// Bugs info
 const maxActiveBugs = 2;
 const bugSize = 28;
-const bugHitRadius = bugSize * 0.35; // Hit collision
+const bugHitRadius = bugSize * 0.35;
 const bugMinSpeed = 0.3;
 const bugMaxSpeed = 0.5;
-const bugSpawnX = 24; // Keep inside canvas
-const maxBugsTotal = 15; // 15 bugs to defeat
-let numberOfBugsSpawned = 0;
-
-// Bugs defeated
-let bugsDefeated = 0;
-
-// 15 Sky colours from day to night
-const skyColours = [
-    "#87CEEB",
-    "#79B8E6",
-    "#6BA2E1",
-    "#5D8CDC",
-    "#4F76D7",
-    "#4261D1",
-    "#384FBE",
-    "#2E3EAB",
-    "#273498",
-    "#212A86",
-    "#1B216F",
-    "#16195A",
-    "#121246",
-    "#0E0C34",
-    "#0A0724"
-];
+// Keep inside canvas
+const bugSpawnX = 24;
 
 // Bug types + emojis; collection of bugs
 const bugTypes = [
@@ -214,31 +139,57 @@ const bugTypes = [
     }
 ];
 
-// Bug type weakness mapping to element that can hurt it
-const bugWeakness = {
-    blue: "water",
-    green: "earth",
-    red: "fire",
-    yellow: "air"
-}
-
 // Active bugs array
 let bugs = [];
+// 15 bugs to defeat
+const maxBugsTotal = 15;
+// Total bugs created so far
+let numberOfBugsSpawned = 0;
+// Total bugs defeated
+let bugsDefeated = 0;
 
 // How long a bug stays shrunk after being hit, in frames
 const hurtFrames = 8;
 
-// Ending freeze time for 5 seconds
+// 15 Sky colours from day to night
+const skyColours = [
+    "#87CEEB",
+    "#79B8E6",
+    "#6BA2E1",
+    "#5D8CDC",
+    "#4F76D7",
+    "#4261D1",
+    "#384FBE",
+    "#2E3EAB",
+    "#273498",
+    "#212A86",
+    "#1B216F",
+    "#16195A",
+    "#121246",
+    "#0E0C34",
+    "#0A0724"
+];
+
+// Ending 3 seconds delay before showing Play Again button
 let endStartTime = 0;
-const endDelay = 5000; // millisecond
+const endDelay = 3000;
+
+// Load assets
+function preload() {
+    // Load font
+    fontTitle = loadFont("assets/fonts/Bestime.ttf");
+}
 
 /**
- * Creates the canvas and initializes the fly
+ * Creates the canvas
  */
 function setup() {
     createCanvas(canvas.w, canvas.h);
 }
 
+/**
+ * Draws the current screen
+ */
 function draw() {
     if (state === "title") {
         drawTitleScreen();
@@ -257,56 +208,181 @@ function draw() {
     }
 }
 
-// Draw title screen
+/**
+ * Find element info by name
+ */
+function elementByName(name) {
+    for (const element of elementTypes) {
+        if (element.name === name) {
+            // Found a match
+            return element;
+        }
+    }
+    // No match
+    return undefined;
+}
+
+/**
+ * Find element info by key; keys W E F A
+ */
+function elementByKey(key) {
+    for (const element of elementTypes) {
+        if (element.key === key) {
+            // Found a match
+            return element;
+        }
+    }
+    // No match
+    return undefined;
+}
+
+/**
+ * Use title font or Georgia
+ */
+function useTitleFont() {
+    // Georgia font in case custom font does not work
+    textFont(fontTitle || "Georgia");
+}
+
+/**
+ * Use body font Georgia
+ */
+function useBodyFont() {
+    textFont("Georgia");
+}
+
+/**
+ * Draw a centered title
+ */
+function drawCenteredTitle(textString, centerY, size, colour) {
+    push();
+    textAlign(CENTER, CENTER);
+    useTitleFont();
+    textSize(size);
+    stroke(0);
+    strokeWeight(6);
+    fill(colour);
+    text(textString, width / 2, centerY);
+    pop();
+}
+
+/**
+ * Draw a centered text body
+ */
+function drawCenteredBody(textString, centerY, size, colour) {
+    push();
+    textAlign(CENTER, CENTER);
+    useTitleFont();
+    textSize(size);
+    noStroke();
+    fill(colour);
+    text(textString, width / 2, centerY);
+    pop();
+}
+
+/**
+ * Draw yellow button
+ */
+function drawButton(x, y, w, h, label) {
+    // Box
+    push();
+    stroke(0);
+    strokeWeight(3);
+    fill("#ffd54f");
+    rect(x, y, w, h, 10);
+    pop();
+
+    // Text label
+    push();
+    noStroke();
+    fill(0);
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    useTitleFont();
+    text(label, x + w / 2, y + h / 2 + 1);
+    pop();
+}
+
+// Checks mouse (m) touching button (b)
+function mouseTouchingButton(mX, mY, bLeft, bTop, bWidth, bHeight) {
+    const bRight = bLeft + bWidth;
+    const bBottom = bTop + bHeight;
+
+    // If mouse is on the button
+    if (((mX >= bLeft) && (mX <= bRight)) && ((mY >= bTop) && (mY <= bBottom))) {
+        return true;
+    }
+    // If mouse is not on the button
+    else {
+        return false;
+    }
+}
+
+/**
+ * Draw pond at the bottom
+ */
+function drawPond() {
+    push();
+    noStroke();
+    fill("#41a5e3ff");
+    rect(0, height - 60, width, 60);
+    pop();
+}
+
+/**
+ * Draw sky from day to night
+ */
+function drawSky() {
+    // 15 sky colours only
+    const skyIndex = constrain(bugsDefeated, 0, skyColours.length - 1);
+    background(skyColours[skyIndex]);
+}
+
+/**
+ * Draw Bugs Left counter
+ */
+function drawBugsLeftCounter() {
+    const bugsLeft = maxBugsTotal - bugsDefeated;
+    push();
+    textAlign(LEFT, TOP);
+    useTitleFont();
+    textSize(16);
+    fill("yellow");
+    strokeWeight(7);
+    stroke("black");
+    text(bugsLeft + " bugs left!", 12, 12);
+    pop();
+}
+
+/**
+ * Draws title screen
+ */
 function drawTitleScreen() {
     background("#87ceeb");
     drawPond();
 
-    // Title text
-    push();
-    textAlign(CENTER, TOP);
-    textSize(48);
-    textFont(fontTitle || "Georgia");
-    stroke(0);
-    strokeWeight(6);
-    fill("#00c853");
-    text("Froggy, the Avatar", width / 2, 80);
-    pop();
-
-    // Creator credits
-    push();
-    textAlign(CENTER, TOP);
-    textSize(16);
-    textFont(fontTitle || "Georgia");
-    noStroke();
-    fill(0);
-    text("made by Ray Hernaez", width / 2, 150);
-    pop();
+    drawCenteredTitle("Froggy, the Avatar", 140, 50, "#00c853");
+    drawCenteredBody("made by Ray Hernaez", 200, 20, "#363636ff");
 
     // Info button
     drawButton(buttons.infoButton.x, buttons.infoButton.y, buttons.infoButton.w, buttons.infoButton.h, "Info");
 }
 
+/**
+ * Draw Info screen (instructions)
+ */
 // Draw info screen
 function drawInfoScreen() {
     background("#e3f2fd");
     drawPond();
 
-    // Heading text
-    push();
-    textAlign(LEFT, TOP);
-    textSize(28);
-    textFont(fontTitle || "Georgia");
-    noStroke();
-    fill("#1b5e20");
-    text("Game Info", 24, 70);
-    pop();
+    drawCenteredTitle("Game Info", 70, 28, "#d56666ff");
 
     // Story text
     const story =
         "Froggy is the new Avatar and can bend all four elements: Water, Earth, Fire, Air. \n" +
         "He must stop pesky bugs before they reach the pond. \n\n" +
-        "Match element to defeat each coloured fly. \n" +
+        "Match element to defeat each coloured bug. \n" +
         "Water 💦 against blue bugs 🦋 \n" +
         "Earth 🪨 against green bugs 🪲 \n" +
         "Fire 🔥 against red bugs 🐞 \n" +
@@ -317,10 +393,10 @@ function drawInfoScreen() {
 
     const switchElem =
         "Switch elements by pressing keys: \n" +
-        "W key (💦) \n" +
-        "E key (🪨) \n" +
-        "F key (🔥) \n" +
-        "A key (💨)";
+        "W key (water 💦) \n" +
+        "E key (earth 🪨) \n" +
+        "F key (fire 🔥) \n" +
+        "A key (air 💨)";
 
     push();
     textAlign(LEFT, TOP);
@@ -340,12 +416,11 @@ function drawInfoScreen() {
     drawButton(buttons.playButton.x, buttons.playButton.y, buttons.playButton.w, buttons.playButton.h, "Play");
 }
 
-// Draw play screen; actual gameplay
+/**
+ * Draws play screen (actual gameplay)
+ */
 function drawPlayScreen() {
-    // 15 sky colours only
-    const skyIndex = constrain(bugsDefeated, 0, skyColours.length - 1);
-    background(skyColours[skyIndex]);
-
+    drawSky();
     drawPond();
 
     // Bug system
@@ -353,6 +428,7 @@ function drawPlayScreen() {
     updateBugs();
     drawBugs();
 
+    // Frog + attacks
     moveFrog();
     updateProjectiles();
     drawProjectiles();
@@ -362,87 +438,71 @@ function drawPlayScreen() {
     // Small bug counter
     drawBugsLeftCounter();
 
-    // Collision
+    // Collisions
     checkProjectileBugCollisions();
 
     // If all 15 bugs are defeated
     if (bugsDefeated >= maxBugsTotal) {
+        // Frog wins
         state = "win";
+        // Start the 3s delay
         endStartTime = millis();
     }
 }
 
-// Draw Bugs Left counter
-function drawBugsLeftCounter() {
-    const bugsLeft = maxBugsTotal - bugsDefeated;
-    push();
-    textFont(fontTitle || "Georgia");
-    textSize(16);
-    fill(255);
-    strokeWeight(3);
-    textAlign(LEFT, TOP);
-    text(bugsLeft + " bugs left!", 12, 12);
-    pop();
-}
+/**
+ * Draw end screen
+ */
+function drawEndScreen(bgColour, title, titleColour, body) {
+    background(bgColour);
+    drawPond();
 
-// Draw button
-function drawButton(x, y, w, h, label) {
-    // button
-    push();
-    stroke(0);
-    strokeWeight(3);
-    fill("#ffd54f");
-    rect(x, y, w, h, 10);
-    pop();
+    drawCenteredTitle(title, height / 2 - 20, 64, titleColour);
+    drawCenteredBody(body, height / 2 + 30, 20, 255);
 
-    // label
-    push();
-    noStroke();
-    fill(0);
-    textAlign(CENTER, CENTER);
-    textSize(20);
-    textFont(fontTitle || "Georgia");
-    text(label, x + w / 2, y + h / 2 + 1);
-    pop();
-}
-
-// Draw pond
-function drawPond() {
-    push();
-    noStroke();
-    fill("#41a5e3ff");
-    rect(0, height - 60, width, 60);
-    pop();
-}
-
-// Checks mouse (m) touching button (b)
-function mouseTouchingButton(mX, mY, bLeft, bTop, bWidth, bHeight) {
-    const bRight = bLeft + bWidth;
-    const bBottom = bTop + bHeight;
-
-    // If mouse is on the button
-    if (((mX >= bLeft) && (mX <= bRight)) && ((mY >= bTop) && (mY <= bBottom))) {
-        return true;
-    }
-    // If mouse is not on the button
-    else {
-        return false;
+    // After 3s, show Play Again button
+    if (millis() - endStartTime >= endDelay) {
+        drawButton(buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h, "Play Again");
     }
 }
 
-// Keep 2 bugs active & limit to 15 bugs in total
+/**
+ * Draw Win screen
+ */
+function drawWinScreen() {
+    const lastSky = skyColours[skyColours.length - 1];
+    drawEndScreen(lastSky, "SUCCESS!", "#00e676", "Froggy has saved the pond from pesky bugs!");
+}
+
+/**
+ * Draw Fail screen
+ */
+function drawFailScreen() {
+    const lastSky = skyColours[skyColours.length - 1];
+    drawEndScreen(lastSky, "FAIL!", "#ff5252", "A bug has reached the pond...");
+}
+
+/**
+ * Keep 2 bugs on screen; max 15 bugs
+ */
 function keepActiveBugs() {
     while (bugs.length < maxActiveBugs && numberOfBugsSpawned < maxBugsTotal) {
         spawnBug();
     }
 }
 
-// Spawns a new bug at random x at the top
+/**
+ * Spawn a bug with random movement
+ */
 function spawnBug() {
-    const type = random(bugTypes); // Random bug emoji
-    const x = random(bugSpawnX, width - bugSpawnX); // Random x
-    const y = -bugSize; // Just above the top to keep smooth spawn
-    const speedY = random(bugMinSpeed, bugMaxSpeed); // Random speed
+    // Random bug emoji
+    const type = random(bugTypes);
+    // Random x
+    const x = random(bugSpawnX, width - bugSpawnX);
+    // Just above the top to keep smooth spawn
+    const y = -bugSize;
+    // Random speed
+    const speedY = random(bugMinSpeed, bugMaxSpeed);
 
     const bug = {
         name: type.name,
@@ -488,21 +548,36 @@ function spawnBug() {
     numberOfBugsSpawned += 1;
 }
 
-// Bugs go down slowly
+/**
+ * Checks if bug reached the pond
+ */
+function bugReachedPond(bug) {
+    if (bug.y >= height - 60) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+/**
+ * Update bugs
+ */
 function updateBugs() {
     for (let i = bugs.length - 1; i >= 0; i--) {
         const newBug = bugs[i];
 
-        // Countdown active shrunk state
+        // Skrink countdown
         if (newBug.hurtFrames > 0) {
             newBug.hurtFrames -= 1;
         }
 
         // if bug reaches the pond
-        if (newBug.y >= height - 60) {
+        if (bugReachedPond(newBug)) {
+            // You failed
             state = "fail";
             endStartTime = millis();
-            // Stop updating
+            // Stop updating...
             return;
         }
 
@@ -537,31 +612,83 @@ function updateBugs() {
     }
 }
 
-// Draw bugs
+/**
+ * Get bug size
+ */
+function getBugSize(bug) {
+    if (bug.hurtFrames > 0) {
+        // Shrink
+        return 0.5;
+    }
+    else {
+        // Normal size
+        return 1;
+    }
+}
+
+/**
+ * Draw bugs
+ */
 function drawBugs() {
     push();
     textAlign(CENTER, CENTER);
-    textSize(bugSize);
     noStroke();
-    for (const newBug of bugs) {
-        let scale = undefined;
-        // If bug is hurt
-        if (newBug.hurtFrames > 0) {
-            // It shrinks
-            scale = 0.5;
-        }
-        // If not hurt
-        else {
-            // Normal size
-            scale = 1;
-        }
-        textSize(newBug.size * scale);
+    for (let i = 0; i < bugs.length; i++) {
+        const newBug = bugs[i];
+        const size = getBugSize(newBug);
+        textSize(newBug.size * size);
         text(newBug.emoji, newBug.x, newBug.y);
     }
     pop();
 }
 
-// Check projectile + bug collision
+/**
+ * Launch an elemental projectile
+ */
+function launchProjectile() {
+    const element = frog.element;
+    projectiles.push({
+        x: frog.body.x,
+        y: frog.body.y - frog.body.size * 0.45,
+        speed: -projectileSpeed,
+        element: element.name,
+        emoji: element.emoji,
+        size: projectileSize,
+        collision: projectileHitRadius
+    });
+}
+
+/**
+ * Update projectiles
+ */
+function updateProjectiles() {
+    for (let i = projectiles.length - 1; i >= 0; i--) {
+        const projectile = projectiles[i];
+        projectile.y += projectile.speed;
+        if (projectile.y < -projectile.size) {
+            // Remove projectile
+            projectiles.splice(i, 1);
+        }
+    }
+}
+
+/**
+ * Draw projectiles
+ */
+function drawProjectiles() {
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(projectileSize);
+    noStroke();
+    for (const projectile of projectiles) {
+        text(projectile.emoji, projectile.x, projectile.y);
+    }
+    pop();
+}
+
+/**
+ * Check projectile + bug collision
+ */
 function checkProjectileBugCollisions() {
     for (let i = bugs.length - 1; i >= 0; i--) {
         const newBug = bugs[i];
@@ -578,6 +705,7 @@ function checkProjectileBugCollisions() {
                     newBug.hitsLeft -= 1;
                     // Trigger bug shrinking
                     newBug.hurtFrames = hurtFrames;
+
                     // If bug is hit twice
                     if (newBug.hitsLeft <= 0) {
                         // Bug is a goner
@@ -586,10 +714,12 @@ function checkProjectileBugCollisions() {
                         bugsDefeated = constrain(bugsDefeated + 1, 0, maxBugsTotal);
                     }
                 }
+                // Move to next bug
                 break;
             }
         }
     }
+    // Keep 2 bugs
     keepActiveBugs();
 }
 
@@ -601,7 +731,7 @@ function moveFrog() {
 }
 
 /**
- * Displays the tongue (tip and line connection) and the frog (body)
+ * Draws the frog
  */
 function drawFrog() {
     // Draw the frog's body
@@ -612,8 +742,11 @@ function drawFrog() {
     pop();
 }
 
+/**
+ * Draw frog's eyes
+ */
 function drawFrogEyes() {
-    // relative to frog's body
+    // Relative to frog's body
     const eyeRadius = frog.body.size * 0.18;
     const pupilRadius = eyeRadius * 0.45;
     const spaceBetweenEyes = frog.body.size * 0.38;
@@ -625,7 +758,7 @@ function drawFrogEyes() {
     const squint = (state === "play" && mouseIsPressed); //condition
 
     if (squint) {
-        // Draw squint ><
+        // Draw squint eyes ><
         push();
         stroke(20);
         strokeWeight(max(2, floor(eyeRadius * 0.35)));
@@ -637,7 +770,6 @@ function drawFrogEyes() {
         line(rightX + eyeRadius, eyeY - eyeRadius * 0.5, rightX - eyeRadius, eyeY);
         line(rightX + eyeRadius, eyeY + eyeRadius * 0.5, rightX - eyeRadius, eyeY);
         pop();
-        return;
     }
     else {
         drawEyeWithPupil(leftX, eyeY, eyeRadius, pupilRadius);
@@ -645,6 +777,9 @@ function drawFrogEyes() {
     }
 }
 
+/**
+ * Draws pupil
+ */
 function drawEyeWithPupil(x, y, eyeRadius, pupilRadius) {
     // Eyeball
     push();
@@ -657,62 +792,9 @@ function drawEyeWithPupil(x, y, eyeRadius, pupilRadius) {
     pop();
 }
 
-// Draw win screen
-function drawWinScreen() {
-    // Keep last sky colour
-    background(skyColours[skyColours.length - 1]);
-    drawPond();
-
-    push();
-    textAlign(CENTER, CENTER);
-    textFont(fontTitle || "Georgia");
-    stroke(0);
-    strokeWeight(6);
-    fill("#00e676");
-    textSize(64);
-    text("SUCCESS!", width / 2, height / 2 - 20);
-
-    textFont("Georgia");
-    noStroke();
-    fill(255);
-    textSize(20);
-    text("Froggy has saved the pond from pesky bugs!", width / 2, height / 2 + 30);
-    pop();
-
-    // After 5 seconds, show Play Again button
-    if (millis() - endStartTime >= endDelay) {
-        drawButton(buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h, "Play Again");
-    }
-}
-
-// Draw fail screen
-function drawFailScreen() {
-    background("#100A1A");
-    drawPond();
-
-    push();
-    textAlign(CENTER, CENTER);
-    textFont(fontTitle || "Georgia");
-    stroke(0);
-    strokeWeight(6);
-    fill("#ff5252");
-    textSize(64);
-    text("FAIL!", width / 2, height / 2 - 20);
-
-    textFont("Georgia");
-    noStroke();
-    fill(255);
-    textSize(20);
-    text("A bug reached the pond...", width / 2, height / 2 + 30);
-    pop();
-
-    // After 5 seconds, show Play Again button
-    if (millis() - endStartTime >= endDelay) {
-        drawButton(buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h, "Play Again");
-    }
-}
-
-// Reset everything to start a fresh game
+/**
+ * Reset everything to start a fresh game
+ */
 function resetGame() {
     state = "title";
     bugs = [];
@@ -741,8 +823,9 @@ function mousePressed() {
             // Start new game
             bugs = [];
             projectiles = [];
-            numberOfBugsSpawned = 0; // Reset total spawn
-            bugsDefeated = 0; // Reset to day sky
+            // Reset total spawn
+            numberOfBugsSpawned = 0;
+            bugsDefeated = 0;
             keepActiveBugs();
         }
     }
@@ -750,8 +833,8 @@ function mousePressed() {
     else if (state === "play") {
         launchProjectile();
     }
-    // Only click Play Again button after 5 seconds
     else if (state === "win" || state === "fail") {
+        // Only click Play Again button after 3 seconds
         if (millis() - endStartTime >= endDelay) {
             if (mouseTouchingButton(mouseX, mouseY, buttons.playAgainButton.x, buttons.playAgainButton.y, buttons.playAgainButton.w, buttons.playAgainButton.h)) {
                 resetGame();
@@ -760,6 +843,9 @@ function mousePressed() {
     }
 }
 
+/**
+ * Handles key pressed
+ */
 function keyPressed() {
     const pressed = elementByKey(key.toLowerCase());
     if (pressed) {
