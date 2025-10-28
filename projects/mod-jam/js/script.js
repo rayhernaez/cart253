@@ -405,7 +405,7 @@ function drawInfoScreen() {
         "Fire 🔥 against red bugs 🐞 \n" +
         "Air 💨 against yellow bugs 🐝 \n\n" +
         "Move Froggy with your mouse \n" +
-        "Click to attack \n" +
+        "Click mouse to attack \n" +
         "Hit a bug twice to defeat them!";
 
     const switchElem =
@@ -744,7 +744,8 @@ function checkProjectileBugCollisions() {
  * Moves the frog to the mouse position on x
  */
 function moveFrog() {
-    frog.body.x = mouseX;
+    // Keep frog in the canvas
+    frog.body.x = constrain(mouseX, 0, width);
 }
 
 /**
