@@ -707,8 +707,10 @@ function drawProjectiles() {
  * Check projectile + bug collision
  */
 function checkProjectileBugCollisions() {
+    // Loop through bugs
     for (let i = bugs.length - 1; i >= 0; i--) {
         const newBug = bugs[i];
+        // Loop through projectiles
         for (let j = projectiles.length - 1; j >= 0; j--) {
             const projectile = projectiles[j];
             const distance = dist(projectile.x, projectile.y, newBug.x, newBug.y);
@@ -731,7 +733,7 @@ function checkProjectileBugCollisions() {
                         bugsDefeated = constrain(bugsDefeated + 1, 0, maxBugsTotal);
                     }
                 }
-                // Move to next bug
+                // Stop checking this bug and move to the next bug
                 break;
             }
         }
