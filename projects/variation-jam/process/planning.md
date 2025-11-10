@@ -47,6 +47,7 @@ Ray Hernaez
 
 ### Story & Dialogues
 - Write the menu texts, story, dialogue lines
+- Images to use
 
 ### Menu
 - Title
@@ -73,4 +74,3 @@ Ray Hernaez
 - Recap
 - Credits
 - Play again button
-
