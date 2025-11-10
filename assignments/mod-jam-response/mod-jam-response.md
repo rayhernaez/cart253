@@ -1,4 +1,4 @@
-# Art Jam Response
+# Mod Jam Response
 
 Ray Hernaez
 
