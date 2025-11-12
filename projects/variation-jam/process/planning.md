@@ -42,6 +42,10 @@ Ray Hernaez
     - BG music
     - button clicks
     - voices?
+    
+## Plan (screeny)
+
+![Flow Chart](./assets/images/plan/flow-chart.jpg)
 
 ## STEPS 🎈
 
