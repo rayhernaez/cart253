@@ -2,34 +2,33 @@
 
 Ray Hernaez
 
-## TEXTS 📝
 
-### Story Page
+## Story Page
 
 Hawk is missing. The family’s silver balloon drifted over town and now everyone is talking. You arrive with a curious grin and a trusty notepad. The living room is full of nervous energy. Someone knows something. Ask questions, follow the crumbs, and see what pops.
 
-#### Erick
+### Erick
 Dad with big ideas and bigger hand gestures. Loves gadgets and backyard balloon projects. Tries to look brave but his eyes keep zipping around the room.
 
-#### Peng
+### Peng
 Mom with the calm voice and the sharp memory. Keeps the house running like a tiny spaceship. Gentle smile, careful answers, notices every little thing.
 
-#### Tori
+### Tori
 Big sister with quick comebacks and quicker thumbs. Smart, a little sarcastic, headphones always nearby. Knows the secret spots and the family gossip.
 
-#### Hawk
+### Hawk
 The missing boy. Small, speedy, imagination set to turbo. Loves hiding places, space helmets, and snacks.
 
 ## Instructions Page
 
 You are the interviewer. The living room is your hub. Tap a character to begin. During the interview, tap the dialogue box to keep the talk going. When it ends you return back to the living room. Talk to everyone.
 
-#### What to do?
+### What to do?
 - Talk to Erick, Peng, and Tori
 - Pay attention to little details
 - Finish all three interviews and figure out where the missing boy could be
 
-### Erick's Interview
+## Erick's Interview
 
 Interviewer: Thanks for sitting down with me, Erick. I know today has been a lot.
 Erick: Yeah. I am trying to keep it together. Ask whatever you need.
@@ -85,7 +84,7 @@ Erick: Buddy, you are not in trouble. Please answer me. Just say where you are a
 Interviewer: We will keep checking every inch. Is there anything else I should know?
 Erick: Only this. I built that balloon to make them smile. I never meant for it to leave the ground without me holding it. I will not stop until he is back on the couch, eating snacks, rolling his eyes at my science talks.
 
-### Peng's Interview
+## Peng's Interview
 
 Interviewer: Thank you for talking with me, Peng. I know this is hard.
 Peng: I want to help. If talking helps us find him faster, I will talk.
@@ -144,7 +143,7 @@ Peng: Just before the lift. He was by the patio chair with his hands on his knee
 Interviewer: How are you holding up right now?
 Peng: I am scared, but I am steady. I will keep looking and calling until I hear his voice. I want him back on the couch with his socks on the wrong feet and crumbs on his shirt. That is all I want.
 
-### Tori's Interview
+## Tori's Interview
 
 Interviewer: Thanks for meeting with me, Tori. I know this is a lot right now.
 Tori: It is, but I can talk. If saying it out loud helps us find him, I will keep going.
@@ -206,7 +205,7 @@ Tori: The attic ladder sticks if you pull it too soft. The pantry has a low cupb
 Interviewer: What do you need from everyone around you right now?
 Tori: Clear voices, steady hands, and no blame until he is found. We can talk about knots and tape later. Right now I only care about hearing my little brother say “I am here.”
 
-### Hawk's Interview
+## Hawk's Interview
 
 Interviewer: Hawk, everyone is so glad you are here. Are you feeling okay?
 Hawk: I am okay. My tummy is loud and I want crackers.
@@ -265,6 +264,6 @@ Hawk: The couch under the blanket fort. I can see the TV a little and I can hear
 Interviewer: Thank you, Hawk. You were very brave to tell the truth.
 Hawk: Can I have crackers now and maybe juice?
 
-### Outro
+## Outro
 
 This project is a fictional retelling inspired by the Netflix documentary “Trainwreck: Balloon Boy.” Names and details are changed, but the feelings of panic, relief, and family love remain at the heart of it.

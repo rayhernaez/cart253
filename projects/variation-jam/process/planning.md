@@ -46,8 +46,8 @@ Ray Hernaez
 ## STEPS 🎈
 
 ### Story & Dialogues
-- Write the menu texts, story, dialogue lines
-- Images to use
+- Write the menu texts, story, dialogue lines ✅
+- Images to use ✅
 
 ### Menu
 - Title
