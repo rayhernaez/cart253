@@ -45,7 +45,7 @@ Ray Hernaez
     
 ## Plan (screeny)
 
-![Flow Chart](./assets/images/plan/flow-chart.jpg)
+![Flow Chart](../assets/images/plan/flow-chart.jpg)
 
 ## STEPS 🎈
 
@@ -54,8 +54,9 @@ Ray Hernaez
 - Images to use ✅
 
 ### Menu
-- Title
-    - Story & Instruction
+- Title ✅
+    - Story
+    - Instruction
     - Play
 
 ### Selection Scene

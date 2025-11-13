@@ -5,7 +5,7 @@ Ray Hernaez
 
 ## Story Page
 
-Hawk is missing. The family’s silver balloon drifted over town and now everyone is talking. You arrive with a curious grin and a trusty notepad. The living room is full of nervous energy. Someone knows something. Ask questions, follow the crumbs, and see what pops.
+Hawk is missing! The family is sure he floated off with the silver balloon, but nothing makes sense. As the interviewer, your job is to listen closely and gather the pieces. Talk to each family member and see what they remember.
 
 ### Erick
 Dad with big ideas and bigger hand gestures. Loves gadgets and backyard balloon projects. Tries to look brave but his eyes keep zipping around the room.
