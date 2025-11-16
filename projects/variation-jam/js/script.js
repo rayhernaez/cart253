@@ -59,6 +59,14 @@ const dialogPanel = {
     opacity: 170
 }
 
+// Dialog Next Line Indicator
+const dialogNextIcon = {
+    size: 18,
+    padRight: 24,
+    padBottom: 35,
+    floatPX: 6,
+    floatSpeed: 0.08
+}
 
 // Character Hit Boxes
 const erickHitBox = {
@@ -105,20 +113,15 @@ let hawkInterview = undefined;
 // Font
 let fontBestime = undefined;
 
+// Dialogs JSON
+let dialogsJSON = undefined;
+
 // Dialogue
 let dialogue = {
     lines: [],
     index: 0,
     active: false
 }
-
-// Temporary Sample Lines
-const erickLines = [
-    "YOU:\nThanks for sitting down with me, Erick. I know today has been a lot.",
-    "ERICK:\nYeah. I am trying to keep it together. Ask whatever you need.",
-    "YOU:\nStart from the beginning. What were you working on in the yard?",
-    "ERICK:\nThe balloon. A shiny silver one I built for a little science show. I wanted to lift it a meter, teach the kids about lift and balance."
-]
 
 // Preload
 function preload() {
@@ -138,13 +141,16 @@ function preload() {
     hawkStanding = loadImage('./assets/images/family/standing/hawk-full.png');
 
     // Characters - Interview Closeups
-    erickInterview = loadImage('./assets/images/family/no-mouths/erick-scene.png');
-    pengInterview = loadImage('./assets/images/family/no-mouths/peng-scene.png');
-    toriInterview = loadImage('./assets/images/family/no-mouths/tori-scene.png');
-    hawkInterview = loadImage('./assets/images/family/no-mouths/hawk-scene.png');
+    erickInterview = loadImage('./assets/images/family/mouths/erick-scene.png');
+    pengInterview = loadImage('./assets/images/family/mouths/peng-scene.png');
+    toriInterview = loadImage('./assets/images/family/mouths/tori-scene.png');
+    hawkInterview = loadImage('./assets/images/family/mouths/hawk-scene.png');
 
     // Font
     fontBestime = loadFont('./assets/fonts/Bestime.ttf');
+
+    // JSON
+    dialogsJSON = loadJSON('./assets/data/dialogs.json')
 }
 
 // Menu checks
@@ -288,6 +294,29 @@ function drawText(textString, thePanel) {
     }
 }
 
+function drawDialogNextIcon() {
+    // Only show while dialog is active
+    if (!dialogue.active) {
+        return;
+    }
+    const dialogPanelSize = getDialogPanelSize();
+    const size = dialogNextIcon.size;
+    const sizeHalf = size / 2;
+    const floatY = Math.sin(frameCount * dialogNextIcon.floatSpeed) * dialogNextIcon.floatPX;
+
+    // Position
+    const x = dialogPanelSize.x + dialogPanelSize.w - dialogNextIcon.padRight;
+    const y = dialogPanelSize.y + dialogPanelSize.h - dialogNextIcon.padBottom + floatY;
+
+    push();
+    noStroke();
+    fill('white');
+    // Upside down triangle
+    // triangle(x - sizeHalf, y - size * 0.6, y + sizeHalf, y - size * 0.06, x, y + size * 0.6)
+    triangle(x - sizeHalf, y - sizeHalf * 0.1, x + sizeHalf, y - size * 0.06, x, y + size * 0.6)
+    pop();
+}
+
 function drawElement(elements) {
     for (const element of elements) {
         // If element is a p5 image
@@ -320,6 +349,9 @@ function drawElement(elements) {
             rectMode(CORNER);
             rect(element.padX, element.padTop, width - element.padX * 2, height - element.padTop - element.padBottom, element.cornerRadius);
             pop();
+
+            // Draw the Next Line Indicator thigny
+            drawDialogNextIcon();
         }
     }
 }

@@ -17,14 +17,15 @@ function erickDraw() {
     // background('yellow');
     // console.log(mouseX, mouseY);
 
-    drawElement([bgImage, erickInterview, erickLines]);
+    drawElement([bgImage, erickInterview, dialogsJSON.ERICK]);
 
     if (!dialogue.active) {
-        startDialog(erickLines);
+        startDialog(dialogsJSON.ERICK);
     }
 
     drawElement([dialogPanel]);
     drawText(currentLine(), dialogPanel);
+    updateCursor([getDialogPanelSize()]);
 
     // updateCursor([backBtnHitBox, playBtnHitBox]);
 
