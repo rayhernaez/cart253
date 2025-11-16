@@ -12,7 +12,6 @@
 
 const textInstructions =
     "~ INSTRUCTIONS ~\n\n\n" +
-    "What to do?\n\n" +
     "Tap the person you want to talk to\n" +
     "Pay attention to little details\n" +
     "Finish all three interviews";

@@ -55,13 +55,13 @@ Ray Hernaez
 
 ### Menu
 - Title ✅
-    - Story
-    - Instruction
-    - Play
+    - Story ✅
+    - Instruction ✅
+    - Play ✅
 
 ### Selection Scene
-- Living room with the 3 characters
-    - Clickable names below them?
+- Living room with the 3 characters ✅
+    - Clickable names below them? ❌
 
 ### Dialogue Scenes
 - Dad scene
