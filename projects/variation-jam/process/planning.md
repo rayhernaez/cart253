@@ -64,7 +64,7 @@ Ray Hernaez
     - Clickable names below them? ❌
 
 ### Dialogue Scenes
-- Dad scene
+- Dad scene ✅
 - Mom scene
 - Sister scene
 

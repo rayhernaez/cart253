@@ -272,7 +272,7 @@ function drawText(textString, thePanel) {
         fill("white");
         noStroke();
         textAlign(LEFT, CENTER);
-        textSize(25);
+        textSize(20);
         text(textString, x, y, w, h);
         pop();
     }

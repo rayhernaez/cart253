@@ -14,9 +14,6 @@
  * Display the erick interview
  */
 function erickDraw() {
-    // background('yellow');
-    // console.log(mouseX, mouseY);
-
     drawElement([bgImage, erickInterview, dialogsJSON.ERICK]);
 
     if (!dialogue.active) {
@@ -26,18 +23,6 @@ function erickDraw() {
     drawElement([dialogPanel]);
     drawText(currentLine(), dialogPanel);
     updateCursor([getDialogPanelSize()]);
-
-    // updateCursor([backBtnHitBox, playBtnHitBox]);
-
-    // // If user have read both story and instructions
-    // if (checkedStory && checkedInstructions) {
-    //     drawElement([bgImage, panel, backBtn, playBtn]);
-    // }
-    // else {
-    //     drawElement([bgImage, panel, backBtn]);
-    // }
-
-    // drawText(textStory, panel);
 }
 
 /**
@@ -49,13 +34,4 @@ function erickMousePressed() {
         // Show next dialog line
         advanceDialog();
     }
-    // // If mouse touches Back Button
-    // if (mouseTouchesHitBox(backBtnHitBox)) {
-    //     // Go to main menu
-    //     state = "menu";
-    // }
-    // else if (mouseTouchesHitBox(playBtnHitBox) && checkedStory && checkedInstructions) {
-    //     // Go to living room
-    //     state = "living room";
-    // }
 }

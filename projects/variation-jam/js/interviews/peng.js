@@ -10,41 +10,28 @@
  * https://p5js.org/
  */
 
-// const textStory =
-//     "~ STORY ~\n\n\n" +
-//     "Hawk is missing!\n\nThe family is sure he floated off with the silver balloon, but nothing makes sense. As the interviewer, your job is to listen closely and gather the pieces. Talk to each family member and see what they remember.";
-
 /**
  * Display the peng interview
  */
 function pengDraw() {
-    background('red');
-    // console.log(mouseX, mouseY);
+    drawElement([bgImage, pengInterview, dialogsJSON.PENG]);
 
-    // updateCursor([backBtnHitBox, playBtnHitBox]);
+    if (!dialogue.active) {
+        startDialog(dialogsJSON.PENG);
+    }
 
-    // // If user have read both story and instructions
-    // if (checkedStory && checkedInstructions) {
-    //     drawElement([bgImage, panel, backBtn, playBtn]);
-    // }
-    // else {
-    //     drawElement([bgImage, panel, backBtn]);
-    // }
-
-    // drawText(textStory, panel);
+    drawElement([dialogPanel]);
+    drawText(currentLine(), dialogPanel);
+    updateCursor([getDialogPanelSize()]);
 }
 
 /**
  * This will be called whenever the mouse is pressed while the peng interview is active
  */
 function pengMousePressed() {
-    // If mouse touches Back Button
-    if (mouseTouchesHitBox(backBtnHitBox)) {
-        // Go to main menu
-        state = "menu";
-    }
-    else if (mouseTouchesHitBox(playBtnHitBox) && checkedStory && checkedInstructions) {
-        // Go to living room
-        state = "living room";
+    // If mouse touches Dialog Panel
+    if (mouseInDialogPanel()) {
+        // Show next dialog line
+        advanceDialog();
     }
 }
