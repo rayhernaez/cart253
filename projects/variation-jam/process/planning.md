@@ -65,15 +65,15 @@ Ray Hernaez
 
 ### Dialogue Scenes
 - Dad scene ✅
-- Mom scene
-- Sister scene
+- Mom scene ✅
+- Sister scene ✅
 
 ### Selection Scene + Hawk appearance
 - Animate Hawk appearing into the living room
     - Clickable name below him
     
 ### Hawk's Dialogue Scene
-- Hawk scene
+- Hawk scene ✅
 
 ### Ending Scene
 - Recap
